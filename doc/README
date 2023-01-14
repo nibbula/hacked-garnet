@@ -39,7 +39,7 @@ index.ps
 To quickly print all the files in the right order, you can execute the
 shell script 'print-garnet-docs', found in this directory.  It uses the 'lpr'
 command to send all the files to your default printer.  
-  Ex:  csh print-garnet-docs
+  Ex:  sh print-garnet-docs
 
 (Of course, you might want to print manual-cover.ps to a different
 printer, so it will be in color.)

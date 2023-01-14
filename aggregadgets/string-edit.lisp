@@ -21,8 +21,8 @@ Change log:
 
 (in-package "OPAL")
 
-(eval-when (eval load compile)
-  (export '(string-set-func)))
+;; (eval-when (eval load compile)
+;;   (export '(string-set-func)))
 
 ;; Used for testing the string-set-func methods
 (defmacro string-set-func (gadget-obj str-obj final-event final-string)

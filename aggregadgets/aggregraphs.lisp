@@ -41,11 +41,10 @@ Change log:
 
 (in-package "OPAL")
 
-
-(eval-when (eval load compile)
-  (export '(AGGREGRAPH AGGREGRAPH-NODE-PROTOTYPE AGGREGRAPH-LINK-PROTOTYPE
-	    LAYOUT-TREE))
-  (export '(source-to-graph-node remove-root make-root add-node layout-graph)))
+;; (eval-when (eval load compile)
+;;   (export '(AGGREGRAPH AGGREGRAPH-NODE-PROTOTYPE AGGREGRAPH-LINK-PROTOTYPE
+;; 	    LAYOUT-TREE))
+;;   (export '(source-to-graph-node remove-root make-root add-node layout-graph)))
  
 (defmacro Source-To-Graph-Node (graph source)
   `(let ((the-graph ,graph))

@@ -26,8 +26,8 @@ Change log:
 
 (in-package "GARNET-GADGETS")
 
-(eval-when (eval load compile)
-  (export '(Horiz-Choice-List Pop-Up-From-Icon)))
+;; (eval-when (eval load compile)
+;;   (export '(Horiz-Choice-List Pop-Up-From-Icon)))
 
 (defparameter value-bold-font (opal:get-standard-font NIL :bold NIL))
 
@@ -100,8 +100,9 @@ Change log:
       (:maybe-constant '(:left :top :icon-image :pop-up-function))
       (:left 0)
       (:top 0)
-      (:icon-image (opal:read-image (user::garnet-pathnames "pop-up-icon.bm" 
-						user::Garnet-Bitmap-Pathname)))
+      (:icon-image (opal:read-image
+		    (garnet-user::garnet-pathnames
+		     "pop-up-icon.bm" garnet-user::Garnet-Bitmap-Pathname)))
       (:interim-selected NIL) ; set by interactor
       (:pop-up-function NIL) ; put a function here to pop-up the menu or whatever,
 			     ; It should stuff its results into the value field

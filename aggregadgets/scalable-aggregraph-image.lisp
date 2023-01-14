@@ -30,9 +30,11 @@ Change log:
 
 (in-package "OPAL")
 
+#|
 (eval-when (eval load compile)
   (export '(SCALABLE-AGGREGRAPH-IMAGE SCALABLE-AGGREGRAPH-IMAGE-NODE-PROTOTYPE
 	    SCALABLE-AGGREGRAPH-IMAGE-LINK-PROTOTYPE)))
+|#
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; par-assoc

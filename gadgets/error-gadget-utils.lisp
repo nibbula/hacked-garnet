@@ -37,11 +37,11 @@ Change log:
 
 (in-package "GARNET-GADGETS")
 
-(eval-when (eval load compile)
-  (export '(Display-Error Display-Error-And-Wait
-	    Display-Query Display-Query-And-Wait
-	    Careful-Eval Careful-String-Eval Careful-Read-From-String
-	    Careful-Eval-Formula-Lambda)))
+;; (eval-when (eval load compile)
+;;   (export '(Display-Error Display-Error-And-Wait
+;; 	    Display-Query Display-Query-And-Wait
+;; 	    Careful-Eval Careful-String-Eval Careful-Read-From-String
+;; 	    Careful-Eval-Formula-Lambda)))
 
 (defun internal-display-q-or-e (gadget string wait labels)
   ;; Set the message to be displayed

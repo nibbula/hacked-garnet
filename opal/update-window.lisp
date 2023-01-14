@@ -284,7 +284,7 @@
 		       ;; This rectangle will have the background filling
 		       ;; style, so the object will disappear.
 		       (set-frr-bbox object)
-		       (setf (aref frr-update-vals *rect-fstyle*)
+		       (setf (aref frr-update-vals +rect-fstyle+)
 			     (g-value object :fast-redraw-filling-style))
 		       (fast-erase fast-redraw-rectangle a-window
 				   line-style-gc filling-style-gc))
@@ -530,7 +530,7 @@
 	   (free-list fastdraw-objects))))
 
 (define-method :update opal::window (a-window &optional (total-p NIL))
-  (declare (optimize (speed 3) (safety 0)))
+  ;; (declare (optimize (speed 3) (safety 0)))
   (unwind-protect
     (#-apple progn
      #+apple ccl:without-interrupts

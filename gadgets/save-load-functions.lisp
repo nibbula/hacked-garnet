@@ -81,11 +81,11 @@
 
 (in-package "GARNET-GADGETS")
 
-(eval-when (eval load compile)
-  (export '(DISPLAY-SAVE-GADGET DESTROY-SAVE-GADGET HIDE-SAVE-GADGET
-	    DISPLAY-LOAD-GADGET DESTROY-LOAD-GADGET HIDE-LOAD-GADGET
-	    display-save-gadget-and-wait display-load-gadget-and-wait
-	    save-file-if-wanted)))
+;; (eval-when (eval load compile)
+;;   (export '(DISPLAY-SAVE-GADGET DESTROY-SAVE-GADGET HIDE-SAVE-GADGET
+;; 	    DISPLAY-LOAD-GADGET DESTROY-LOAD-GADGET HIDE-LOAD-GADGET
+;; 	    display-save-gadget-and-wait display-load-gadget-and-wait
+;; 	    save-file-if-wanted)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; This function gets called whenever the user hits
@@ -122,7 +122,7 @@
 
 (defun Check-Save-Filename (save-gad filename)
   (let* ((Prev-Dir (g-value save-gad :prev-dir))
-	 (full-fn (user::garnet-pathnames Prev-Dir filename))
+	 (full-fn (garnet-user::garnet-pathnames Prev-Dir filename))
 	 (qg (g-value save-gad :query-window))
 	 (dummy NIL))
     (if (AND ;;Already exists
@@ -287,6 +287,7 @@
 ;;; menu.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun put-filenames-in-menu (save-gad dir-name)
+#|
   (let ((file-list NIL)
 	#+clisp
         (dir (append (directory (concatenate 'string dir-name "*"))
@@ -305,12 +306,27 @@
     (push #+apple ":"
           #-apple ".." 
           file-list)
+|#
+  (let ((file-list NIL)
+	#+clisp
+        (dir (append (directory (concatenate 'string dir-name "*"))
+                     (directory (concatenate 'string dir-name "*/"))))
+	#-clisp
+	(dir (directory dir-name))
+	(save-win (g-value save-gad :window)))
+    (dolist (name dir)
+	    (setf file-list (cons (string-left-trim '(#\/)
+                                    (enough-namestring name (truename dir-name)))
+                                  file-list)))
+    (setf file-list (sort file-list #'(lambda (x y) (string< x y))))
+    (push #+apple ":"
+          #-apple ".." 
+          file-list)
     (s-value (g-value save-gad :file-menu) :items file-list)
     (s-value (g-value save-gad :file-menu) :selected-ranks NIL)
     (s-value (g-value save-gad :message) :string "")
     (s-value (g-value save-gad :file-menu :scroll-bar) :value 0)
     (opal:update save-win)))
-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; This function is called when an object in the file-menu is
@@ -359,7 +375,7 @@
 (defun Do-Load-File (load-gad filename)
   (hide-load-gadget load-gad)
   (kr-send load-gad :selection-function load-gad
-	   (user::garnet-pathnames (g-value load-gad :prev-dir) filename))
+	   (garnet-user::garnet-pathnames (g-value load-gad :prev-dir) filename))
   )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

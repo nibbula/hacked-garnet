@@ -262,10 +262,10 @@ Change log:
 
 (in-package "GARNET-GADGETS")
 
-(eval-when (eval load compile)
-  (export '(Prop-Sheet ReUsePropSheet prop-sheet-for-obj
-	    ReUsePropSheetObj Get-Val-For-PropSheet-Value
-	    Set-Val-For-PropSheet-Value)))
+;; (eval-when (eval load compile)
+;;   (export '(Prop-Sheet ReUsePropSheet prop-sheet-for-obj
+;; 	    ReUsePropSheetObj Get-Val-For-PropSheet-Value
+;; 	    Set-Val-For-PropSheet-Value)))
 
 
 (defun Prop-Sheet-OK (prop-gadget item)
@@ -1015,7 +1015,7 @@ Change log:
 	  (setq slot-descs (nreverse slot-descs))))
     slot-descs))
 
-(defconstant tnil (list T NIL))
+(gu:define-constant tnil (list T NIL))
 
 ;;; Returns NIL if slot should be omitted, or else a description
 ;;; of the appropriate form (depending on whether a gadget or not)
@@ -1231,14 +1231,16 @@ so set there"      val slot fail-objs
       (setq prev this))))
 
 
-#+garnet-debug
-(eval-when (eval load compile)
-  (export '(prop-sheet-for-obj-Go  prop-sheet-for-obj-stop)))
+;; #+garnet-debug
+;; (eval-when (eval load compile)
+;;   (export '(prop-sheet-for-obj-Go  prop-sheet-for-obj-stop)))
 
 #+garnet-debug
 (defun prop-sheet-for-obj-Go ()
+  #| how about NO
   (unless (get :garnet-modules :error-gadget)
-    (user::garnet-load "gg:error-gadget-loader"))
+    (garnet-user::garnet-load "gg:error-gadget-loader"))
+  |#
   (create-instance 'prop-test-error-gad error-gadget)
   (create-instance 'prop-sheet-for-obj-win inter:interactor-window
 		   (:aggregate (create-instance 'prop-sheet-for-obj-agg

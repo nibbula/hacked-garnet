@@ -52,11 +52,12 @@
 ;;;  01/21/93 Rajan Parthasarathy - Created
 
 (in-package "GARNET-GADGETS")
-(eval-when (eval load compile)
-  (export '(Motif-Trill-Device))
-  #+garnet-debug
-  (export '(Motif-Trill-Win Motif-Trill-Agg Motif-Trill-Obj
-	    Motif-Trill-Go Motif-Trill-Stop)))
+
+;; (eval-when (eval load compile)
+;;   (export '(Motif-Trill-Device))
+;;   #+garnet-debug
+;;   (export '(Motif-Trill-Win Motif-Trill-Agg Motif-Trill-Obj
+;; 	    Motif-Trill-Go Motif-Trill-Stop)))
 	  
 (defun motif-trill-stop-action (inter obj stop-event)
   (declare (ignore inter stop-event))

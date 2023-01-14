@@ -25,8 +25,8 @@ Change log:
 ============================================================
 |#
 
-(in-package "INTERACTORS")
-
+;; (in-package "INTERACTORS")
+(in-package :gesture)
 
 ;; inner-product returns the inner product of the two given vectors.
 ;;

@@ -71,10 +71,10 @@ Change log:
 
 (in-package "GARNET-GADGETS")
 
-(eval-when (eval load compile)
-  (export '(Scrolling-Labeled-Box Scrolling-Labeled-Box-Win
-	    Scrolling-Labeled-Box-Go Scrolling-Labeled-Box-Stop
-	    Scrolling-Labeled-Box-Obj)))
+;; (eval-when (eval load compile)
+;;   (export '(Scrolling-Labeled-Box Scrolling-Labeled-Box-Win
+;; 	    Scrolling-Labeled-Box-Go Scrolling-Labeled-Box-Stop
+;; 	    Scrolling-Labeled-Box-Obj)))
 
 (create-instance 'Scrolling-Labeled-Box opal:aggregadget
    :declare ((:parameters :left :top :width :label-string :value :label-offset
@@ -98,7 +98,7 @@ Change log:
    (:value "Field")
    (:selection-function NIL)
    (:field-font opal:default-font) ;;**Must be fixed width**
-   (:label-font (opal:get-standard-font NIL :bold NIL))
+   (:label-font (formula (opal:get-standard-font NIL :bold NIL)))
    (:active-p T)
 
    ; Generally non-customizable slots

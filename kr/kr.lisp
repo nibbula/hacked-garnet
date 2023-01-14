@@ -43,16 +43,18 @@
 ;;; Unless the user explicitly overrides this, set for maximum execution
 ;;; speed.
 ;;;
-(eval-when (eval compile load)
-  (proclaim '(special user::*default-garnet-proclaim*))
-  (if (boundp 'user::*default-garnet-proclaim*)
-      (if user::*default-garnet-proclaim*
-        (proclaim user::*default-garnet-proclaim*))
-      (proclaim '(optimize (safety 1) (space 0)
-		  (speed #-LUCID 3 #+LUCID 2) #+(or ALLEGRO APPLE) (debug 3))
-		#+COMMENT
-		'(optimize (safety 0) (space 0)
-		  (speed #-LUCID 3 #+LUCID 2) #+(or ALLEGRO APPLE) (debug 0)))))
+;; (eval-when (:compile-toplevel :load-toplevel :execute)
+;;   (proclaim '(special user::*default-garnet-proclaim*))
+;;   (if (boundp 'user::*default-garnet-proclaim*)
+;;       (if user::*default-garnet-proclaim*
+;;         (proclaim user::*default-garnet-proclaim*))
+;;       (proclaim '(optimize (safety 0) (space 0) (speed 0) (debug 3))
+;;                 #+COMMENT
+;; 		'(optimize (safety 1) (space 0)
+;; 		  (speed #-LUCID 3 #+LUCID 2) #+(or ALLEGRO APPLE) (debug 3))
+;; 		#+COMMENT
+;; 		'(optimize (safety 0) (space 0)
+;; 		  (speed #-LUCID 3 #+LUCID 2) #+(or ALLEGRO APPLE) (debug 0)))))
 
 
 
@@ -64,7 +66,7 @@
 ;;; Returns T if the <obj> is a schema which was not destroyed.
 ;;;
 (defun schema-p (obj)
-  (locally (declare (optimize (speed 3) (safety 0)))
+  (locally #+(or) (declare (optimize (speed 3) (safety 0)))
     (and (is-schema obj)
        	;; make sure it's not a formula, and it's not deleted.
 	 #+GARNET-BINS
@@ -90,7 +92,7 @@
 ;;; Completely clear ALL the slots in the <schema>.
 ;;;
 (defun clear-schema-slots (schema)
-  (locally (declare (optimize (speed 3) (safety 0)))
+  (locally #+(or) (declare (optimize (speed 3) (safety 0)))
     #+GARNET-BINS
     (let ((bins (schema-bins schema)))
       (dotimes (i *bins-length*)
@@ -208,7 +210,7 @@
 ;;; RETURNS: the inherited value, or NIL.
 ;;; 
 (defun g-value-inherit-values (schema slot is-leaf slot-structure)
-  (declare (function formula-fn (t &optional t) t))
+  ;; (declare (function formula-fn (t &optional t) t))
   (let (has-parents)
     (if (a-local-only-slot slot)	; These CANNOT be inherited.
       (return-from g-value-inherit-values NIL))
@@ -627,8 +629,10 @@
   (let ((p-name (concatenate 'string (symbol-name simple-type) "P"))
 	(-p-name (concatenate 'string (symbol-name simple-type) "-P")))
     (cond ((memberq simple-type '(NULL ATOM)) simple-type)
-	  (T (or (find-symbol p-name 'lisp)
-		 (find-symbol -p-name 'lisp)
+	  ;; (T (or (find-symbol p-name 'lisp)
+	  ;; 	 (find-symbol -p-name 'lisp)
+	  (T (or (find-symbol p-name 'cl)
+		 (find-symbol -p-name 'cl)
 		 (find-symbol p-name)
 		 (find-symbol -p-name)
 		 (error "Could not find predicate for simple-type ~S~%"
@@ -684,7 +688,7 @@
 	   (let ((fn-name (second type)))
 	     `',fn-name) ;; koz
 	   `(function (lambda (value)
-	      (declare (optimize (safety 0) (space 0)
+	      (declare #+(or) (optimize (safety 0) (space 0)
 				 (speed #-LUCID 3 #+LUCID 2)
                                  #+(or APPLE ALLEGRO) (debug 0)))
 	      ,(make-lambda-body type)))))
@@ -805,7 +809,7 @@
 ;;; Helper function
 ;;;
 (defun eliminate-constant-formula ()
-  (declare (function destroy-constraint (t t) t))
+  ;; (declare (function destroy-constraint (t t) t))
   ;; This was a constant formula!  Commit suicide.
   (with-demons-disabled
       (destroy-constraint *schema-self* *schema-slot*))
@@ -1206,7 +1210,7 @@
 ;;; Does all the work of the macro S-VALUE.
 ;;;
 (defun s-value-fn (schema slot value)
-  (locally (declare (optimize (speed 3) (safety 0)))
+  (locally #+(or) (declare (optimize (speed 3) (safety 0)))
     (unless (schema-p schema)
     #+GARNET-DEBUG
     (if schema
@@ -2239,7 +2243,7 @@
 
 
 (defun allocate-schema-slots (schema)
-  (locally (declare (optimize (speed 3) (safety 0)))
+  (locally #+(or) (declare (optimize (speed 3) (safety 0)))
     (setf (schema-bins schema)
 	  #+GARNET-BINS
 	  (or (find-unused-resource *reuse-slots* *bins-length*)
@@ -2255,7 +2259,7 @@
 ;;; <needed-slots>.
 ;;; 
 (defun make-a-new-schema (name)
-  (locally (declare (optimize (speed 3) (safety 0)))
+  (locally #+(or) (declare (optimize (speed 3) (safety 0)))
     (if (keywordp name)
     (setf name (symbol-name name)))
   (cond ((null name)
@@ -2424,7 +2428,7 @@
 ;;; Process local-only and constant declarations.
 ;;; 
 (defun process-constant-slots (the-schema parents constants do-types)
-  (locally (declare (optimize (speed 3) (safety 0)))
+  (locally #+(or) (declare (optimize (speed 3) (safety 0)))
   ;; Install all update-slots entries, and set their is-update-slot bits
   (dolist (slot (g-value-no-copy the-schema :UPDATE-SLOTS))
     (let ((entry (slot-accessor the-schema slot)))
@@ -2521,14 +2525,14 @@
 
 
 
-(eval-when (eval compile load)
+(eval-when (:compile-toplevel :load-toplevel :execute)
   (defun cannot-be-quoted (value)
     (or (listp value)
 	(and (symbolp value)
 	     (not (keywordp value))))))
 
 
-(eval-when (eval compile load)
+(eval-when (:compile-toplevel :load-toplevel :execute)
  (defun process-slot-descriptor (x)
    (if (listp x)
        (if (find-if #'cannot-be-quoted (cdr x))
@@ -2560,7 +2564,7 @@
 ;;; - REST OF THE LIST: all slot specifiers, with :IS-A removed (because that
 ;;;   information is moved to the prototype list).
 ;;;
-(eval-when (eval compile load)
+(eval-when (:compile-toplevel :load-toplevel :execute)
   (defun process-slots (slots)
     (let ((output nil)
 	  (is-a nil))
@@ -2746,7 +2750,7 @@
 
 
 
-(eval-when (eval compile load)
+(eval-when (:compile-toplevel :load-toplevel :execute)
   (defun creation-message (name)
     (when *print-new-instances*
 	  (if (and (listp name)
@@ -2975,7 +2979,7 @@
 
 
 (defun T-P (value)
-  (declare (optimize (speed 3) (safety 0) (compilation-speed 0) (space 0))
+  (declare #+(or) (optimize (speed 3) (safety 0) (compilation-speed 0) (space 0))
 	   (ignore value))
   T)
 
@@ -3092,7 +3096,7 @@
 ;;; defined.  This allows objects written with the *print-as-structure*
 ;;; notation to be read back in.
 ;;;
-(eval-when (eval compile load)
+(eval-when (:compile-toplevel :load-toplevel :execute)
   (defun k-reader (stream subchar arg)
     (declare (ignore subchar arg))
     (let ((next-char (read-char stream)))
@@ -3120,7 +3124,7 @@
 ;;; :NO-K-READER onto the *features* list to disable this feature.
 ;;;
 #-NO-K-READER
-(eval-when (eval compile load)
+(eval-when (:compile-toplevel :load-toplevel :execute)
   (set-dispatch-macro-character #\# #\k (function k-reader)))
 
 

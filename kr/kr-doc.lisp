@@ -55,7 +55,7 @@
 ;;;		         :visible "Is the object to be drawn?"))
 
 
-(export '(get-slot-doc set-slot-doc))
+;; (export '(get-slot-doc set-slot-doc))
 
 
 (defun get-slot-doc (schema slot)
@@ -89,8 +89,3 @@
     (s-value schema :slot-doc  doc-plist)))
 	
 (pushnew :KR-DOC *Features*)
-
-	
-	 
-  
-  

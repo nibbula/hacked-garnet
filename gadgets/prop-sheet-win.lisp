@@ -144,9 +144,9 @@ Change log:
 
 (in-package "GARNET-GADGETS")
 
-(eval-when (eval load compile)
-  (export '(prop-sheet-with-OK prop-sheet-for-obj-with-OK Pop-Up-Win-For-Prop
-	    Pop-Up-Win-Change-Obj Pop-Up-Win-Change-Items)))
+;; (eval-when (eval load compile)
+;;   (export '(prop-sheet-with-OK prop-sheet-for-obj-with-OK Pop-Up-Win-For-Prop
+;; 	    Pop-Up-Win-Change-Obj Pop-Up-Win-Change-Items)))
 
 (create-instance 'prop-sheet-with-OK opal:aggregadget
     (:left 5) (:top 5)

@@ -86,8 +86,8 @@ Change log:
 
 (in-package "GARNET-GADGETS")
 
-(eval-when (eval load compile)
-  (export '(ERROR-GADGET QUERY-GADGET)))
+;; (eval-when (eval load compile)
+;;   (export '(ERROR-GADGET QUERY-GADGET)))
 
 ;; NOTE:  If :parent-window is specified, then the parent window must already
 ;; have been opal:update'd when the instance of ERROR-GADGET is created.
@@ -211,10 +211,10 @@ Change log:
 
 
 ;;; testing/demo function for error-gadgets and query gadgets
-#+garnet-debug
-(eval-when (eval load compile)
-  (export '(Error-Gadget-Go Error-Gadget-Stop EGAGDET QGADGET))
-  (proclaim '(special EG-WIN EG-AGG EG-FEED EGADGET QGADGET)))
+;; #+garnet-debug
+;; (eval-when (eval load compile)
+;;   (export '(Error-Gadget-Go Error-Gadget-Stop EGAGDET QGADGET))
+;;   (proclaim '(special EG-WIN EG-AGG EG-FEED EGADGET QGADGET)))
 
 #+garnet-debug
 (defun Error-Gadget-Go ()

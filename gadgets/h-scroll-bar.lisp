@@ -78,11 +78,11 @@
 
 (in-package "GARNET-GADGETS")
 
-(eval-when (eval load compile)
-  (export '(H-Scroll-Bar))
-  #+garnet-debug
-  (export '(H-Scroll-Go H-Scroll-Stop
-	    H-Scroll-Win H-Scroll-Top-Agg H-Scroll-Obj)))
+;; (eval-when (eval load compile)
+;;   (export '(H-Scroll-Bar))
+;;   #+garnet-debug
+;;   (export '(H-Scroll-Go H-Scroll-Stop
+;; 	    H-Scroll-Win H-Scroll-Top-Agg H-Scroll-Obj)))
 
 ;;;
 ;;; HORIZONTAL INDICATOR BOX
@@ -145,7 +145,7 @@
    (:int-feedback-p T)
    (:scroll-p T)
    (:format-string "~a")
-   (:indicator-font (opal:get-standard-font NIL NIL :small))
+   (:indicator-font (formula (opal:get-standard-font NIL NIL :small)))
 
    ;; Generally non-customizable slots
    ;;

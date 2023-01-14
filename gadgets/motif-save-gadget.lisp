@@ -28,8 +28,8 @@
 
 (in-package "GARNET-GADGETS")
 
-(eval-when (eval load compile)
-  (export '(MOTIF-SAVE-GADGET)))
+;; (eval-when (eval load compile)
+;;   (export '(MOTIF-SAVE-GADGET)))
 
 (create-instance 'MOTIF-SAVE-GADGET opal:aggregadget
   :declare ((:parameters :parent-window :window-title :window-left :window-top

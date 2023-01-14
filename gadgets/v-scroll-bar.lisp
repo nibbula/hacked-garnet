@@ -76,11 +76,11 @@
 
 (in-package "GARNET-GADGETS")
 
-(eval-when (eval load compile)
-  (export '(V-Scroll-Bar))
-  #+garnet-debug
-  (export '(V-Scroll-Go V-Scroll-Stop
-	    V-Scroll-Obj V-Scroll-Win V-Scroll-Top-Agg)))
+;; (eval-when (eval load compile)
+;;   (export '(V-Scroll-Bar))
+;;   #+garnet-debug
+;;   (export '(V-Scroll-Go V-Scroll-Stop
+;; 	    V-Scroll-Obj V-Scroll-Win V-Scroll-Top-Agg)))
 
 
 ;;;
@@ -143,7 +143,8 @@
    (:scroll-p T)
    (:selection-function NIL)
    (:format-string "~a")
-   (:indicator-font (opal:get-standard-font NIL NIL :small))
+   ;; (:indicator-font (opal:get-standard-font NIL NIL :small))
+   (:indicator-font (formula (opal:get-standard-font NIL NIL :small)))
 
    ;; Generally non-customizable slots
    ;;

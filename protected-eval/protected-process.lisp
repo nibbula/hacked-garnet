@@ -89,7 +89,7 @@
    *main-event-loop-process*)
 
 
-(when user::launch-process-p
+(when garnet-user::launch-process-p
   (when *main-event-loop-process*
     (kill-main-event-loop-process))
   (launch-main-event-loop-process))

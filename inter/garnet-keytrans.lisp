@@ -50,31 +50,43 @@ Change log:
 
 ;;; X modifier bits translation
 ;;;
-(defvar *modifier-translations* ())
+;; (defvar *modifier-translations* ())
 
 (defun define-keyboard-modifier (clx-mask modifier-name)
   "Causes clx-mask to be interpreted as modifier-name which must be one of
    :control, :meta, :super, :hyper, :shift, or :lock."
-  (let ((map (rassoc clx-mask *modifier-translations*)))
-    (if map
-	(rplacd map modifier-name)
-	(push (cons clx-mask modifier-name) *modifier-translations*))))
+  (with-slots (gem:modifier-translations) gem:*event-receiver*
+    (let ((map (rassoc clx-mask gem:modifier-translations)))
+      (if map
+	  (rplacd map modifier-name)
+	  (push (cons clx-mask modifier-name) gem:modifier-translations)))))
 
-(let ((root (g-value opal::device-info :current-root)))
-  (define-keyboard-modifier (gem:create-state-mask root :control) :control)
-  (define-keyboard-modifier (gem:create-state-mask root :mod-1) :meta)
-  (define-keyboard-modifier (gem:create-state-mask root :shift) :shift)
-  (define-keyboard-modifier (gem:create-state-mask root :lock) :lock))
+;; @@@ This can only be done if there's a device, so it shouldn't be done when
+;; loading. The whole needing a device to load thing seems bogus.
+(defun init-keytrans ()
+  ;; For X this doesn't seem to need any device info, and the ‘root’ argument
+  ;; is ignored, so just temporarily hack it to use the x- version:
+  ;; (let ((root (g-value opal::device-info :current-root)))
+  ;;   (define-keyboard-modifier (gem:create-state-mask root :control) :control)
+  ;;   (define-keyboard-modifier (gem:create-state-mask root :mod-1) :meta)
+  ;;   (define-keyboard-modifier (gem:create-state-mask root :shift) :shift)
+  ;;   (define-keyboard-modifier (gem:create-state-mask root :lock) :lock))
+  (define-keyboard-modifier (xlib:make-state-mask :control) :control)
+  (define-keyboard-modifier (xlib:make-state-mask :mod-1) :meta)
+  (define-keyboard-modifier (xlib:make-state-mask :shift) :shift)
+  (define-keyboard-modifier (xlib:make-state-mask :lock) :lock)
+  )
 
+(init-keytrans)
 
 ;;; end section snarfed from Hemlock
 
-(defparameter *num-modifier-keys* 4) 
+;;(defparameter *num-modifier-keys* 4) 
 
 
-(defparameter *num-mouse-buttons* 6) ;;3 buttons * 2 (for double-click
-(defparameter *mouse-translation-dimensions*
-  (list  (1+ *num-mouse-buttons*) (* *num-modifier-keys* *num-modifier-keys*)))
+;; (defparameter *num-mouse-buttons* 6) ;;3 buttons * 2 (for double-click
+;; (defparameter *mouse-translation-dimensions*
+;;   (list  (1+ *num-mouse-buttons*) (* *num-modifier-keys* *num-modifier-keys*)))
 
 (defparameter *mouse-down-translations* (make-array *mouse-translation-dimensions*))
 (defparameter *mouse-up-translations* (make-array *mouse-translation-dimensions*))
@@ -84,7 +96,11 @@ Change log:
 (defmacro mouse-index (modifier-bits)
   `(let ((sum 0))
      (dolist (mod-bit ,modifier-bits)
-       (incf sum (car (rassoc mod-bit *modifier-translations*)))) sum))
+       (incf sum
+	     (car (rassoc
+		   mod-bit
+		   (gem:modifier-translations gem:*event-receiver*)))))
+     sum))
 
 
 ;;; X11 documentation merely says that pointer keycode numbers begin at 1
@@ -105,23 +121,31 @@ Change log:
 (defparameter *double-click-time* 250) ; in milleseconds
 
 
+;; (defmacro define-mouse-up (button modifier-bits garnet-keyword)
+;;   `(setf (aref *mouse-up-translations* ,button (mouse-index, modifier-bits))
+;; 	,garnet-keyword))
+
+;; (defmacro define-mouse-down (button modifier-bits garnet-keyword)
+;;   `(setf (aref *mouse-down-translations* ,button (mouse-index, modifier-bits))
+;; 	,garnet-keyword))
+
 (defmacro define-mouse-up (button modifier-bits garnet-keyword)
-  `(setf (aref *mouse-up-translations* ,button (mouse-index, modifier-bits))
+  `(setf (aref (gem:mouse-up-translations gem:*event-receiver*) ,button
+	       (mouse-index, modifier-bits))
 	,garnet-keyword))
 
 (defmacro define-mouse-down (button modifier-bits garnet-keyword)
-  `(setf (aref *mouse-down-translations* ,button (mouse-index, modifier-bits))
+  `(setf (aref (gem:mouse-down-translations gem:*event-receiver*) ,button
+	       (mouse-index, modifier-bits))
 	,garnet-keyword))
-
 
 (defmacro modifier-index (incoming-bits)
   `(let ((sum 0))
-    (dolist (ele *modifier-translations*)
+    (dolist (ele (gem:modifier-translations gem:*event-receiver*))
       (let ((bit (car ele)))
 	(unless (zerop (logand bit ,incoming-bits))
 	  (incf sum bit))))
     sum))
-
 
 ;;;     Borrowed from Hemlock -- substitute "Garnet" for "Hemlock" below
 ;;; Hemlock uses its own keysym to character translation since this is easier
@@ -137,20 +161,21 @@ Change log:
 
 (defvar *ignore-undefined-keys* T)
 
-(defvar *keysym-translations* (make-hash-table))
+;; (defvar *keysym-translations* (make-hash-table))
 (defvar *the-keyword-package* (find-package 'keyword))
 
 ;;; Will also handle symbols in the keyword package as characters
 (defun define-keysym (keysym char)
   "Defines a keysym for Hemlock's translation."
-  (if (and (symbolp char)(eq (symbol-package char) *the-keyword-package*))
-      ;; then just hash the keyword
-      (setf (gethash keysym *keysym-translations*) char)
-      ;; else make sure it is a character, and hash
-      (progn
-	(check-type char character)
-	(setf (gethash keysym *keysym-translations*) char)))
-  t)
+  (with-slots (gem:keysym-translations) gem:*event-receiver*
+    (if (and (symbolp char) (eq (symbol-package char) *the-keyword-package*))
+	;; then just hash the keyword
+	(setf (gethash keysym gem:keysym-translations) char)
+	;; else make sure it is a character, and hash
+	(progn
+	  (check-type char character)
+	  (setf (gethash keysym gem:keysym-translations) char)))
+    t))
 
 (defvar *katie-base-char* NIL) ;; used for KATIE
 
@@ -201,7 +226,9 @@ Change log:
 	      'keyword)
       symbol)))
 
-(defun base-char-to-character (base-char bits)
+;;(defun base-char-to-character (base-char bits))
+(defmethod base-char-to-character ((receiver interactor-receiver)
+				   base-char bits)
   (if (keywordp base-char) ; special, create a symbol for the keyword
       (make-keyword-char base-char bits)
   ;else

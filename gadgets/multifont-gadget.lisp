@@ -61,8 +61,8 @@
 
 (in-package "GARNET-GADGETS")
 
-(eval-when (eval load compile)
-  (export '(Multifont-Gadget)))
+;; (eval-when (eval load compile)
+;;   (export '(Multifont-Gadget)))
 
 (create-instance 'MULTIFONT-GADGET opal:aggregadget
    :declare ((:parameters :left :top :initial-text :fill-background-p
@@ -113,9 +113,9 @@
    )
 )
 
-#+garnet-debug
-(eval-when (eval compile load)
-  (export '(multifont-gadget-go  multifont-gadget-stop)))
+;; #+garnet-debug
+;; (eval-when (eval compile load)
+;;   (export '(multifont-gadget-go  multifont-gadget-stop)))
 
 #+garnet-debug
 (defun multifont-gadget-go ()

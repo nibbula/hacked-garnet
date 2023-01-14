@@ -7,8 +7,9 @@
 ;; @@@ This relatively pointless class could be removed if the event loop was
 ;; redesigned to pull generic events from GEM, and not GEM calling into
 ;; Interactor event handlers. In other words make the event types generic and
-;; make most the distribution happen in the device independent Interactor code.
-;; Currently it just encapsulates things we need from the Interactor package.
+;; make most of the distribution happen in the device independent Interactor
+;; code. Currently it just encapsulates things we need from the Interactor
+;; package.
 
 (defclass event-receiver ()
   ((left-button   :initarg :left-button   :accessor left-button)
@@ -49,6 +50,7 @@ Interactor methods that receive GEM events."))
 (defgeneric translate-mouse-character (receiver
 				       root-window button-code
 				       modifier-bits event-key))
+(defgeneric translate-character (receiver root-window x y bits scan-code time))
 
 ;; Events
 (defgeneric do-map-notify (receiver window))

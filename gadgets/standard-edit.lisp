@@ -54,17 +54,17 @@ Change log:
 
 (in-package "GARNET-GADGETS")
 
-(eval-when (eval load compile)
-  (export '(Standard-Delete Standard-Delete-All Standard-Undo-Last-Delete
-	    Standard-To-Bottom Standard-To-Top
-	    Standard-Duplicate Standard-Copy Standard-Cut Standard-Select-All
-	    Standard-Refresh 
-	    Standard-Paste-Same-Place Standard-Paste-Inc-Place
-	    Standard-Initialize-Gadget Standard-NIY
-	    Standard-Group Standard-UnGroup
-				     
-	    Clipboard-Object 
-	    sort-objs-display-order Is-A-Motif-Background Is-A-Motif-Rect)))
+;; (eval-when (eval load compile)
+;;   (export '(Standard-Delete Standard-Delete-All Standard-Undo-Last-Delete
+;; 	    Standard-To-Bottom Standard-To-Top
+;; 	    Standard-Duplicate Standard-Copy Standard-Cut Standard-Select-All
+;; 	    Standard-Refresh 
+;; 	    Standard-Paste-Same-Place Standard-Paste-Inc-Place
+;; 	    Standard-Initialize-Gadget Standard-NIY
+;; 	    Standard-Group Standard-UnGroup
+;;				     
+;; 	    Clipboard-Object 
+;; 	    sort-objs-display-order Is-A-Motif-Background Is-A-Motif-Rect)))
 
 (defparameter Default-Duplicate-Inc-Amt 10)
 

@@ -79,10 +79,10 @@
 
 (in-package "GARNET-GADGETS")
 
-(eval-when (eval load compile)
-  (export '(BROWSER-GADGET
-	    BROWSER-MENU-FN PUSH-FIRST-ITEM PROMOTE-ITEM
-	    SET-FIRST-ITEM BROWSER-MENU-SCROLL-FN BROWSER-SCROLL-FN)))
+;; (eval-when (eval load compile)
+;;   (export '(BROWSER-GADGET
+;; 	    BROWSER-MENU-FN PUSH-FIRST-ITEM PROMOTE-ITEM
+;; 	    SET-FIRST-ITEM BROWSER-MENU-SCROLL-FN BROWSER-SCROLL-FN)))
 
 
 ;;  BROWSER-MENU-FN:  Called when an item is selected or deselected.

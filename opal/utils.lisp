@@ -46,9 +46,10 @@
 
 (in-package "OPAL")
 
-(eval-when (eval load compile)
-  (export '(shell-exec make-image get-garnet-bitmap directory-p
-            time-to-string clip-and-map drawable-to-window)))
+;; @@@ moved to package.lisp
+;; (eval-when (:compile-toplevel :load-toplevel :execute)
+;;   (export '(shell-exec make-image get-garnet-bitmap directory-p
+;;             time-to-string clip-and-map drawable-to-window)))
 
 (defvar garnet-image-date NIL)
 
@@ -73,11 +74,15 @@
       #+cmu
       (ext:process-output (ext:run-program "/bin/sh" (list "-c" command)
 					   :wait NIL :output :stream))
+      #+sbcl
+      (let ((proc (sb-ext:run-program "/bin/sh" (list "-c" command)
+				      :wait NIL :output :stream :error :stream)))
+	(values (sb-ext:process-output proc) (sb-ext:process-error proc)))
       #+lispworks
       (foreign::open-pipe command :shell-type "/bin/sh" :buffered t)
       #+clisp
       (system::make-pipe-input-stream (string command))
-      #-(or allegro lucid cmu lispworks clisp)
+      #-(or allegro lucid cmu lispworks clisp sbcl)
       (error "Don't know how to execute shell functions in this lisp")
       
   (let ((output-string (make-array '(0)
@@ -119,7 +124,7 @@
 #-cmu
 (defun garnet-restart-function ()
   (format t "*** Restarting Garnet ~A image created with opal:make-image ***~%"
-	  user::Garnet-Version-Number)
+	  garnet-user::Garnet-Version-Number)
   (if (boundp 'garnet-image-date)
       (format t "*** Image creation date: ~A ***~%" garnet-image-date))
   (opal:reconnect-garnet))
@@ -128,7 +133,7 @@
 #+cmu
 (defun garnet-restart-function ()
   (format t "*** Restarting Garnet ~A image created on ~A ***~%"
-	  user::Garnet-Version-Number
+	  garnet-user::Garnet-Version-Number
 	  garnet-image-date)
   (opal:reconnect-garnet))
 
@@ -153,7 +158,8 @@
 	(T (setf extra-args (append extra-args (list arg1 arg2))))))
     (values quit gc verbose libfile flush-source-info? extra-args)))
 
-
+;;; @@@ This for sure needs some updating.
+#|
 (defun make-image (filename &rest args)
   #-(or cmu allegro lucid lispworks clisp apple)
     (error "Don't know how to automatically save an image for this lisp.
@@ -173,9 +179,9 @@ Please consult your lisp's user manual for instructions.~%")
   #+allegro
   (progn  
     (if verbose (format t "~%Copying readtable..."))
-    (copy-readtable *readtable* user::Garnet-Readtable)
+    (copy-readtable *readtable* garnet-user::Garnet-Readtable)
     (setf (cdr (assoc '*readtable* excl:*cl-default-special-bindings*))
-          'user::Garnet-Readtable)
+          'garnet-user::Garnet-Readtable)
     (if verbose (format t "copied.~%")))
 
   (progn
@@ -231,7 +237,7 @@ Please consult your lisp's user manual for instructions.~%")
   #+cmu
   (progn
     (setf (getf ext:*herald-items* :garnet)
-	  `("    Garnet Version " ,user::Garnet-Version-Number))
+	  `("    Garnet Version " ,garent-user::Garnet-Version-Number))
     ;; Note: for x86/mp CMUCL, garnet-restart-function must get
     ;; called after the multiprocessing stuff gets initialized.
     ;; So we append garnet-restart-function to the end of the
@@ -278,13 +284,50 @@ Please consult your lisp's user manual for instructions.~%")
      (if verbose (format t "reconnected.~%"))
      ))
   ))
+|#
 
+(defun exit-system ()
+  "Halt the entire Lisp system."
+  #+openmcl (ccl::quit 0)
+  #+cmu (ext:quit)
+  #+(and sbcl use-exit) (sb-ext:exit)
+  #+(and sbcl (not use-exit)) (sb-ext:quit)
+  #+excl (excl:exit)
+  #+clisp (ext:quit)
+  #+ecl (ext:quit)
+  #+abcl (ext:quit)
+  #+clasp (core:quit)
+  #+mezzano nil ;; or we could (mezzano.supervisor:reboot) ?
+  #-(or openmcl cmu sbcl excl clisp ecl abcl clasp)
+  ;; (missing-implementation 'exit-system))
+  (error "I don't know how to exit.
+Please consult your lisp's user manual for instructions.")) ;; lol
+
+(defun make-image (filename &rest args)
+  (multiple-value-bind (quit gc verbose libfile flush-source-info? extra-args)
+      (Extract-Image-Args args)
+    (declare (ignorable gc libfile flush-source-info? extra-args))
+    (progn
+      (if verbose (format t "Disconnecting Garnet..."))
+      (opal:disconnect-garnet)
+      (if verbose (format t "disconnected.~%")))
+    (setf garnet-image-date (time-to-string))
+    (if verbose (format t "Saving image..."))
+    (uiop:register-image-restore-hook #'garnet-restart-function)
+    (uiop:dump-image filename :executable t :compression t)
+    (cond
+      (quit
+       (if verbose (format t "Quitting lisp...~%"))
+       (exit-system))
+      (t
+       (if verbose (format t "Reconnecting Garnet..."))
+       (opal:reconnect-garnet)
+       (if verbose (format t "reconnected.~%"))))))
 
 (defun Get-Garnet-Bitmap (bitmapname)
-  (opal:read-image (user::garnet-pathnames bitmapname
-				    user::Garnet-Bitmap-PathName)))
-
-
+  (opal:read-image
+   (garnet-user::garnet-pathnames bitmapname
+				  garnet-user::Garnet-Bitmap-PathName)))
 
 ;;; If the -d test is true, shell-exec returns "1".  Otherwise, it returns "".
 ;;; This syntax works for all kinds of Unix shells: sh, csh, ksh, tcsh, ...

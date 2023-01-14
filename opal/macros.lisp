@@ -242,6 +242,8 @@
 
 ;;;   IMAGE MACROS
 
+;; @@@ remove root-window arg
+#|
 (defmacro read-image (pathname &optional root-window)
   `(gem:read-an-image (or ,root-window
 		          (g-value device-info :current-root))
@@ -252,7 +254,14 @@
   `(gem:write-an-image (or ,root-window
 			   (g-value device-info :current-root))
                        ,pathname ,image))
+|#
 
+(defmacro read-image (pathname &optional root-window)
+  `(gem:read-an-image ,pathname))
+
+
+(defmacro write-image (pathname image &optional root-window)
+  `(gem:write-an-image ,pathname ,image))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;; For "basics.lisp" ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 

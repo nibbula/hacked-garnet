@@ -70,8 +70,8 @@ that might not match the parts of the aggregate.
 |#
 
 (in-package "OPAL")
-(eval-when (eval load compile)
-  (export '(copy-gadget)))
+;; (eval-when (eval load compile)
+;;   (export '(copy-gadget)))
 
 (defvar *standard-element-slots*)
 

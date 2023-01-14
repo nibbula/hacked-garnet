@@ -58,11 +58,11 @@
 
 (in-package "GARNET-GADGETS")
 
-(eval-when (eval load compile)
-  (export '(Motif-H-Scroll-Bar))
-  #+garnet-debug
-  (export '(Motif-H-Scroll-Go Motif-H-Scroll-Stop
-	    Demo-Motif-H-Scroll-Bar Motif-H-Scroll-Win Motif-H-Scroll-Top-Agg)))
+;; (eval-when (eval load compile)
+;;   (export '(Motif-H-Scroll-Bar))
+;;   #+garnet-debug
+;;   (export '(Motif-H-Scroll-Go Motif-H-Scroll-Stop
+;; 	    Demo-Motif-H-Scroll-Bar Motif-H-Scroll-Win Motif-H-Scroll-Top-Agg)))
 
 
 (create-instance 'MOTIF-H-SCROLL-BAR-LEFT-ARROW opal:aggregadget

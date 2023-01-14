@@ -82,9 +82,8 @@ affected aggrelist.
 
 (in-package "OPAL")
 
-(eval-when (eval load compile)
-  (export '(gadget-add-item gadget-remove-item)))
-
+;; (eval-when (eval load compile)
+;;   (export '(gadget-add-item gadget-remove-item)))
 
 ;; Supports Add-Component's terminology (screen related):
 ;;	:front :back :behind :in-front :at
@@ -331,67 +330,68 @@ affected aggrelist.
     (unless (has-slot-p inst :items)
       (Recursive-Remove-Component inst rank))))
 
+(gu:with-muffled-style-warnings
+  (define-method :remove-local-item opal:aggrelist
+    (alist &optional item &key (key #'opal:no-func))
+    (let* ((items (or (g-local-value alist :items)
+		      (copy-list (g-value alist :items))))
+	   (rank (if item
+		     (position item items
+			       :test #'(lambda (x y)
+					 (equal x (funcall key y))))
+		     (1- (if (numberp items) items (length items))))))
+      (cond (item
+	     (s-value alist :old-items
+		      (s-value alist :items (opal::delete-elt item items key)))
+	     ;; Before destroying the component, remove the item from it
+	     (let* ((comp-to-destroy (nth rank (g-value alist :components))))
+	       (if (and (schema-p item)
+			(g-value item :parent)
+			(Is-In-Hierarchy comp-to-destroy item))
+		   (with-constants-disabled
+		       (remove-local-component (g-value item :parent) item)))
+	       ;; Check to see if the comp-to-destroy still has a parent because
+	       ;; if the item was itself the component, it was just removed
+	       (if (g-value comp-to-destroy :parent)
+		   (remove-local-component alist comp-to-destroy))
+	       ;; Always remove aggrelist components before destroying them so
+	       ;; that the aggrelist bookkeeping will be done.
+	       (opal:destroy comp-to-destroy)))
+	    (t
+	     (if (numberp items)
+		 (s-value alist :old-items (decf (g-value alist :items)))
+		 (s-value alist :old-items
+			  (s-value alist :items (nbutlast items))))
+	     (let ((comp-to-destroy (nth rank (g-value alist :components))))
+	       (remove-local-component alist comp-to-destroy)
+	       (opal:destroy comp-to-destroy)))))))
 
-(define-method :remove-local-item opal:aggrelist
-               (alist &optional item &key (key #'opal:no-func))
-  (let* ((items (or (g-local-value alist :items)
-		    (copy-list (g-value alist :items))))
-	 (rank (if item
-		   (position item items
-			     :test #'(lambda (x y)
-				       (equal x (funcall key y))))
-		   (1- (if (numberp items) items (length items))))))
-    (cond (item
-	   (s-value alist :old-items
-		    (s-value alist :items (opal::delete-elt item items key)))
-	   ;; Before destroying the component, remove the item from it
-	   (let* ((comp-to-destroy (nth rank (g-value alist :components))))
-	     (if (and (schema-p item)
-		      (g-value item :parent)
-		      (Is-In-Hierarchy comp-to-destroy item))
-		 (with-constants-disabled
-		   (remove-local-component (g-value item :parent) item)))
-	     ;; Check to see if the comp-to-destroy still has a parent because
-	     ;; if the item was itself the component, it was just removed
-	     (if (g-value comp-to-destroy :parent)
-		 (remove-local-component alist comp-to-destroy))
-	     ;; Always remove aggrelist components before destroying them so
-	     ;; that the aggrelist bookkeeping will be done.
-	     (opal:destroy comp-to-destroy)))
-	  (t
-	   (if (numberp items)
-	       (s-value alist :old-items (decf (g-value alist :items)))
-	       (s-value alist :old-items
-			(s-value alist :items (nbutlast items))))
-	   (let ((comp-to-destroy (nth rank (g-value alist :components))))
-	     (remove-local-component alist comp-to-destroy)
-	     (opal:destroy comp-to-destroy))))))
+(gu:with-muffled-style-warnings
+  (define-method :remove-item opal:aggrelist
+    (alist &optional item &key (key #'opal:no-func))
+    (let* (#+comment
+	   (items (or (g-local-value alist :items)
+		      (let ((i (g-value alist :items)))
+			(if (numberp i) i (copy-list i)))))
+	   #+comment
+	   (rank (if item
+		     (position item items
+			       :test #'(lambda (x y)
+					 (equal x (funcall key y))))
+		     ;; Remove last item if none are specified
+		     (1- (if (numberp items) items (length items))))))
+      ;; first remove from the prototype
+      (remove-local-item alist item :key key)
 
-(define-method :remove-item opal:aggrelist
-               (alist &optional item &key (key #'opal:no-func))
-  (let* (#+comment
-	 (items (or (g-local-value alist :items)
-		    (let ((i (g-value alist :items)))
-		      (if (numberp i) i (copy-list i)))))
-	 #+comment
-	 (rank (if item
-		   (position item items
-			     :test #'(lambda (x y)
-				       (equal x (funcall key y))))
-		   ;; Remove last item if none are specified
-		   (1- (if (numberp items) items (length items))))))
-    ;; first remove from the prototype
-    (remove-local-item alist item :key key)
-
-    ;; now do instances
-    #+comment
-    (dolist (inst (g-value alist :is-a-inv))
-      (unless (has-slot-p inst :items)
-	;; The instances have already gotten changes in the :items list
-	;; through inheritance, so just remove corresponding components
-	(Recursive-Remove-Component inst rank)
-	;; otherwise, :items is not inherited, so don't inherit changes
-	))))
+      ;; now do instances
+      #+comment
+      (dolist (inst (g-value alist :is-a-inv))
+	(unless (has-slot-p inst :items)
+	  ;; The instances have already gotten changes in the :items list
+	  ;; through inheritance, so just remove corresponding components
+	  (Recursive-Remove-Component inst rank)
+	  ;; otherwise, :items is not inherited, so don't inherit changes
+	  )))))
 
 
 (defun Gadget-Add-Local-Item (gadget item slot args)
@@ -492,12 +492,13 @@ affected aggrelist.
   (Gadget-Add-Local-Item gadget item :button-list args))
 (defun Motif-Buttons-Add-Item (gadget item &rest args)
   (Gadget-Add-Item gadget item :button-list args))
-(defun Motif-Buttons-Remove-Local-Item (gadget &optional item
-					       &key (key #'opal:no-func))
-  (Gadget-Remove-Local-Item gadget item :button-list key))
-(defun Motif-Buttons-Remove-Item (gadget &optional item
-					 &key (key #'opal:no-func))
-  (Gadget-Remove-Item gadget item :button-list key))
+(gu:with-muffled-style-warnings
+  (defun Motif-Buttons-Remove-Local-Item (gadget &optional item
+					  &key (key #'opal:no-func))
+    (Gadget-Remove-Local-Item gadget item :button-list key))
+  (defun Motif-Buttons-Remove-Item (gadget &optional item
+				    &key (key #'opal:no-func))
+    (Gadget-Remove-Item gadget item :button-list key)))
 
 (define-method :change-item aggrelist (agg new-item n)
   (let ((items (g-value agg :items)))

@@ -79,8 +79,8 @@
 
 (in-package "OPAL")
 
-(eval-when (eval load compile)
-  (export '(Make-PS-File)))
+;; (eval-when (:compile-toplevel :load-toplevel :execute)
+;;   (export '(Make-PS-File)))
 
 
 ;;;  POSTSCRIPT NOTES
@@ -1161,7 +1161,7 @@ ArcDict /mtrx matrix put
 				     "Untitled"))
 			  (creator (concatenate 'string
 				     "Make-PS-File -- Garnet Version "
-				     user::Garnet-Version-Number))
+				     garnet-user::Garnet-Version-Number))
 			  (for "")
 			  (comment "")
 			  ;; For debugging the bbox computations

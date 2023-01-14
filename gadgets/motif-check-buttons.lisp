@@ -106,13 +106,13 @@
 
 (in-package "GARNET-GADGETS")
 
-(eval-when (eval load compile)
-  (export '(Motif-Check-Button Motif-Check-Button-Panel))
-  #+garnet-debug
-  (export '(Motif-Check-Buttons-Go Motif-Check-Buttons-Stop
-	    Demo-Motif-Check-Button Demo-Motif-Check-Button-Panel
-	    Motif-Check-Buttons-Top-Agg Motif-Check-Buttons-Win
-	    Demo-Motif-Check-Button2)))
+;; (eval-when (eval load compile)
+;;   (export '(Motif-Check-Button Motif-Check-Button-Panel))
+;;   #+garnet-debug
+;;   (export '(Motif-Check-Buttons-Go Motif-Check-Buttons-Stop
+;; 	    Demo-Motif-Check-Button Demo-Motif-Check-Button-Panel
+;; 	    Motif-Check-Buttons-Top-Agg Motif-Check-Buttons-Win
+;; 	    Demo-Motif-Check-Button2)))
 
 
 (create-instance 'MOTIF-CHECK-BUTTON-TEXT-LABEL-PROTOTYPE opal:text

@@ -24,8 +24,8 @@
 
 (in-package "GARNET-GADGETS")
 
-(eval-when (eval load compile)
-  (export '(MOTIF-LOAD-GADGET)))
+;; (eval-when (eval load compile)
+;;   (export '(MOTIF-LOAD-GADGET)))
 
 (create-instance 'MOTIF-LOAD-GADGET OPAL:AGGREGADGET  
   :declare ((:parameters :parent-window :window-title :window-left :window-top

@@ -77,10 +77,10 @@
 
 (in-package "GARNET-GADGETS")
 
-(eval-when (eval load compile)
-  (export '(Menu))
-  #+garnet-debug
-  (export '(Menu-Go Menu-Stop Menu-Obj Menu-Top-Agg Menu-Win)))
+;; (eval-when (eval load compile)
+;;   (export '(Menu))
+;;   #+garnet-debug
+;;   (export '(Menu-Go Menu-Stop Menu-Obj Menu-Top-Agg Menu-Win)))
 
 (create-instance 'MENU-SHADOW-RECT opal:rectangle
    (:left (o-formula (+ (gv (kr-path 0 :parent) :left)
@@ -224,7 +224,7 @@
    (:shadow-offset 5)
    (:text-offset 4)
    (:title NIL)
-   (:title-font (opal:get-standard-font :serif :roman :large))
+   (:title-font (formula (opal:get-standard-font :serif :roman :large)))
    (:min-menu-width 0)
    (:items '("Item 1" "Item 2" "Item 3" "Item 4"))
    (:item-font opal:default-font)
@@ -312,12 +312,13 @@
 (define-method :add-item MENU (gadget item &rest args)
   (opal::Gadget-Add-Item gadget item :menu-item-list args))
    
-(define-method :remove-local-item MENU
-               (gadget &optional item &key (key #'opal:no-func))
-  (opal::Gadget-Remove-Local-Item gadget item :menu-item-list key))
-(define-method :remove-item MENU
-               (gadget &optional item &key (key #'opal:no-func))
-  (opal::Gadget-Remove-Item gadget item :menu-item-list key))
+(gu:with-muffled-style-warnings
+  (define-method :remove-local-item MENU
+                 (gadget &optional item &key (key #'opal:no-func))
+    (opal::Gadget-Remove-Local-Item gadget item :menu-item-list key))
+  (define-method :remove-item MENU
+                 (gadget &optional item &key (key #'opal:no-func))
+    (opal::Gadget-Remove-Item gadget item :menu-item-list key)))
 
 (s-value MENU :change-item (g-value opal:aggrelist :change-item))
 (s-value MENU :remove-nth-item

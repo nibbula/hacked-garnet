@@ -72,13 +72,13 @@ Change log:
 ============================================================
 |#
 
-(user::garnet-load "gadgets:scrolling-labeled-box-loader")
+;; (user::garnet-load "gadgets:scrolling-labeled-box-loader")
 
 (in-package "GARNET-GADGETS")
  
-(export '(Scrolling-Unlabeled-Box
-	  Scrolling-Unlabeled-Box-Go Scrolling-Unlabeled-Box-Stop
-	  Scrolling-Unlabeled-Box-Obj))
+;; (export '(Scrolling-Unlabeled-Box
+;; 	  Scrolling-Unlabeled-Box-Go Scrolling-Unlabeled-Box-Stop
+;; 	  Scrolling-Unlabeled-Box-Obj))
 
 
 (kr:create-instance 'Scrolling-Unlabeled-Box opal:aggregadget

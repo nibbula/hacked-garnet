@@ -14,6 +14,7 @@
 ;;;  4/12/90 Mitchell    Added #+allegro (gc t)
 ;;;  3/22/90 Robert Cook Define the "GARNET-DEBUG" package for the TI Explorer
 
+(error "Ummm... Don't use this.")
 (in-package "USER")
 
 ;; load utilities needed by inspector, unless already loaded

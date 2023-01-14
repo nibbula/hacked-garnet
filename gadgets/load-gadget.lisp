@@ -24,8 +24,8 @@
 
 (in-package "GARNET-GADGETS")
 
-(eval-when (eval load compile)
-  (export '(LOAD-GADGET)))
+;; (eval-when (eval load compile)
+;;   (export '(LOAD-GADGET)))
 
 (create-instance 'LOAD-GADGET opal:aggregadget
   :declare ((:parameters :parent-window :window-title :window-left :window-top

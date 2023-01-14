@@ -70,8 +70,8 @@ Change log:
 
 (in-package "OPAL")
 
-(eval-when (eval load compile)
-  (export '(aggrelist null-object)))
+;; (eval-when (eval load compile)
+;;   (export '(aggrelist null-object)))
 
 
 ;;;--------------------------------------------------------------------------
@@ -288,23 +288,23 @@ Change log:
 			 (s-value (gv :self) :force-computation? T))))
  )
 
-(defconstant *lister-max-width*           0)
-(defconstant *lister-max-height*          1)
-(defconstant *lister-left*                2)
-(defconstant *lister-top*                 3)
-(defconstant *lister-direction*           4)
-(defconstant *lister-h-spacing*           5)
-(defconstant *lister-v-spacing*           6)
-(defconstant *lister-indent*              7)
-(defconstant *lister-h-align*             8)
-(defconstant *lister-v-align*             9)
-(defconstant *lister-fixed-width-p*      10)
-(defconstant *lister-fixed-height-p*     11)
-(defconstant *lister-fixed-width-size*   12)
-(defconstant *lister-fixed-height-size*  13)
-(defconstant *lister-rank-margin*        14)
-(defconstant *lister-pixel-margin*       15)
-(defconstant *lister-items*              16)
+(defconstant +lister-max-width+           0)
+(defconstant +lister-max-height+          1)
+(defconstant +lister-left+                2)
+(defconstant +lister-top+                 3)
+(defconstant +lister-direction+           4)
+(defconstant +lister-h-spacing+           5)
+(defconstant +lister-v-spacing+           6)
+(defconstant +lister-indent+              7)
+(defconstant +lister-h-align+             8)
+(defconstant +lister-v-align+             9)
+(defconstant +lister-fixed-width-p+      10)
+(defconstant +lister-fixed-height-p+     11)
+(defconstant +lister-fixed-width-size+   12)
+(defconstant +lister-fixed-height-size+  13)
+(defconstant +lister-rank-margin+        14)
+(defconstant +lister-pixel-margin+       15)
+(defconstant +lister-items+              16)
 
 
 ;;;--------------------------------------------------------------------------

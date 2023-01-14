@@ -171,7 +171,7 @@ CHANGE LOG:
     #'(lambda (txt)
 	(if (kr:g-cached-value txt :update-slots-values)
 	    (setf (aref (kr:g-cached-value txt :update-slots-values)
-			opal::*text-xfont*)
+			opal::+text-xfont+)
 		  :closed))))
   
   ;;; Remove all connections to X from the window objects.
@@ -233,8 +233,8 @@ CHANGE LOG:
 	(do-all-instances opal:text
 	  #'(lambda (txt)
 	      (let ((vals (g-cached-value txt :update-slots-values)))
-		(if (and vals (eq (aref vals opal::*text-xfont*) :closed))
-		  (setf (aref vals opal::*text-xfont*)
+		(if (and vals (eq (aref vals opal::+text-xfont+) :closed))
+		  (setf (aref vals opal::+text-xfont+)
 			(s-value txt :xfont (g-value txt :font :xfont))))))))
 
     (dolist (f *auxilliary-reconnect-routines*)

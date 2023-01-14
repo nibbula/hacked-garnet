@@ -79,11 +79,11 @@
 
 (in-package "GARNET-GADGETS")
 
-(eval-when (eval load compile)
-  (export '(V-Slider))
-  #+garnet-debug
-  (export '(V-Slider-Go V-Slider-Stop
-	    V-Slider-Win V-Slider-Top-Agg V-Slider-Obj)))
+;; (eval-when (eval load compile)
+;;   (export '(V-Slider))
+;;   #+garnet-debug
+;;   (export '(V-Slider-Go V-Slider-Stop
+;; 	    V-Slider-Win V-Slider-Top-Agg V-Slider-Obj)))
 
 
 (create-instance 'V-SLIDER-INDICATOR opal:arrowhead
@@ -243,7 +243,7 @@
    (:value-feedback-p T) ;; Whether to report slider position above shaft
    (:scroll-p T)
    (:value-feedback-font opal:default-font)
-   (:enum-font (opal:get-standard-font :fixed :roman :small))
+   (:enum-font (formula (opal:get-standard-font :fixed :roman :small)))
    (:format-string "~a")
    (:enum-format-string "~a")
    (:selection-function NIL)

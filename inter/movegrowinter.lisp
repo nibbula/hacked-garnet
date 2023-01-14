@@ -151,7 +151,8 @@ Change log:
         ;; RGA --- added call to get-obj-slots-for-movegrow
     (multiple-value-bind (left top width height)
 	(get-obj-slots-for-movegrow obj nil an-interactor)
-        ;; use a global to avoid cons-ing
+      (declare (ignore left top))
+      ;; use a global to avoid cons-ing
       (setf (first *glo-points*)
 	(case attach
 	  ((:nw :sw :w) x)
@@ -533,7 +534,8 @@ Change log:
 (defun get-obj-slots-for-movegrow (obj line-p inter)
   (when obj 
     (let ((slots-to-set (g-value inter :slots-to-set))
-	  (old-points (kr:g-value obj (if line-p :points :box))))
+	  ;; (old-points (kr:g-value obj (if line-p :points :box)))
+	  )
       (cond ((member slots-to-set '(:box :points))
 	     ;; RGA using old-points gives some odd effects
 	     ;; (if old-points (values-list old-points))

@@ -269,8 +269,8 @@ Change log:
 
 (in-package "GARNET-GADGETS")
 
-(eval-when (eval load compile)
-  (export '(Multi-Graphics-Selection Set-Selection Undo-Last-Move-Grow)))
+;; (eval-when (eval load compile)
+;;   (export '(Multi-Graphics-Selection Set-Selection Undo-Last-Move-Grow)))
 
 ;; These are the size of the selection boxes
 (defparameter multi-size 7)  ; should be odd
@@ -1649,11 +1649,11 @@ The :save-list-for-undo slot of the gadget will contain
 ;;; Debugging Functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-#+garnet-debug
-(eval-when (eval load compile)
- (export '(Multi-Graphics-Selection-Go
-	   Multi-Graphics-Selection-Obj
-	   Multi-Graphics-Selection-Stop)))
+;; #+garnet-debug
+;; (eval-when (eval load compile)
+;;  (export '(Multi-Graphics-Selection-Go
+;; 	   Multi-Graphics-Selection-Obj
+;; 	   Multi-Graphics-Selection-Stop)))
 #+garnet-debug (defparameter Multi-Graphics-Selection-Wins NIL)
 #+garnet-debug
 (defun Multi-Graphics-Selection-Stop ()

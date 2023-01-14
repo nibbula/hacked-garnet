@@ -72,7 +72,15 @@ Change log:
 ==================================================================
 |#
 
-(in-package :AGATE)
+(defpackage :agate
+  (:documentation "Gesture trainer application..")
+  (:use :cl :kr :inter :garnet-user)
+  (:export
+   #:agate
+   #:do-go
+   #:do-stop
+   ))
+(in-package ::agate)
 
 ;; Load motif stuff, unless already loaded
 (defvar TRAIN-APP-INIT
@@ -1486,4 +1494,3 @@ Change log:
     (unless dont-enter-main-event-loop #-cmu (inter:main-event-loop)))
 
 (format t "Type (agate:do-go) to begin.~%")
-

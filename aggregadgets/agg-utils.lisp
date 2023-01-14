@@ -20,8 +20,8 @@ Change log:
 
 (in-package "OPAL")
 
-(eval-when (eval load compile)
-  (export '(no-func)))
+;; (eval-when (eval load compile)
+;;   (export '(no-func)))
 
 ;;; No-function: used as default value for the matching function.
 (defun no-func (x) x)

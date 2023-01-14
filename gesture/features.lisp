@@ -34,8 +34,8 @@ Change log:
 ============================================================
 |#
 
-(in-package "INTERACTORS")
-
+;; (in-package "INTERACTORS")
+(in-package :gesture)
 
 ;; structure definitions
 ;; structure to store an attribute vector

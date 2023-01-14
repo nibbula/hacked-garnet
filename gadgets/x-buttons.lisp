@@ -99,12 +99,12 @@
 
 (in-package "GARNET-GADGETS")
 
-(eval-when (eval load compile)
-  (export '(X-Button X-Button-Panel))
-  #+garnet-debug
-  (export '(X-Buttons-Go X-Buttons-Stop
-	    X-Buttons-Obj X-Button-Obj X-Buttons-Top-Agg X-Buttons-Win
-	    X-Button-Obj2)))
+;; (eval-when (eval load compile)
+;;   (export '(X-Button X-Button-Panel))
+;;   #+garnet-debug
+;;   (export '(X-Buttons-Go X-Buttons-Stop
+;; 	    X-Buttons-Obj X-Button-Obj X-Buttons-Top-Agg X-Buttons-Win
+;; 	    X-Button-Obj2)))
 
 (create-instance 'X-BUTTON opal:aggregadget
   :declare ((:parameters :left :top :button-width :button-height
@@ -404,13 +404,14 @@
   (opal::Gadget-Add-Local-Item gadget item :x-button-list args))
 (define-method :add-item X-BUTTON-PANEL (gadget item &rest args)
   (opal::Gadget-Add-Item gadget item :x-button-list args))
-   
-(define-method :remove-local-item X-BUTTON-PANEL
-               (gadget &optional item &key (key #'opal:no-func))
-  (opal::Gadget-Remove-Local-Item gadget item :x-button-list key))
-(define-method :remove-item X-BUTTON-PANEL
-               (gadget &optional item &key (key #'opal:no-func))
-  (opal::Gadget-Remove-Item gadget item :x-button-list key))
+
+(gu:with-muffled-style-warnings   
+  (define-method :remove-local-item X-BUTTON-PANEL
+                 (gadget &optional item &key (key #'opal:no-func))
+    (opal::Gadget-Remove-Local-Item gadget item :x-button-list key))
+  (define-method :remove-item X-BUTTON-PANEL
+                 (gadget &optional item &key (key #'opal:no-func))
+    (opal::Gadget-Remove-Item gadget item :x-button-list key)))
 
 (s-value X-BUTTON-PANEL :change-item (g-value opal:aggrelist :change-item))
 (s-value X-BUTTON-PANEL :remove-nth-item

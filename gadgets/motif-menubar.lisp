@@ -98,16 +98,14 @@
 
 (in-package "GARNET-GADGETS")
 
-(eval-when (eval load compile)
-  (export '(MOTIF-MENUBAR MOTIF-BAR-ITEM MAKE-MOTIF-SUBMENU-WIN
-				   
-	    ; Creation Functions
-	    Make-Motif-Menubar Make-Motif-Bar-Item Make-Motif-Submenu-Item))
-
-  ; Demo things
-  #+garnet-debug
-  (export '(MOTIF-MENUBAR-GO MOTIF-MENUBAR-STOP DEMO-MOTIF-MENUBAR
-	    MOTIF-MENUBAR-WIN MOTIF-MENUBAR-TOP-AGG)))
+;; (eval-when (eval load compile)
+;;   (export '(MOTIF-MENUBAR MOTIF-BAR-ITEM MAKE-MOTIF-SUBMENU-WIN
+;; 	    ; Creation Functions
+;; 	    Make-Motif-Menubar Make-Motif-Bar-Item Make-Motif-Submenu-Item))
+;;   ; Demo things
+;;   #+garnet-debug
+;;   (export '(MOTIF-MENUBAR-GO MOTIF-MENUBAR-STOP DEMO-MOTIF-MENUBAR
+;; 	    MOTIF-MENUBAR-WIN MOTIF-MENUBAR-TOP-AGG)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; First function is to display the submenu from gilt, etc.
@@ -705,16 +703,16 @@
   (s-value motif-size-text :string (string-downcase value)))
 
 #+garnet-debug
-(defun Motif-Fixed-Fn (gadget bar-item submenu-item)
-  (declare (ignore gadget bar-item submenu-item))
+(defun Motif-Fixed-Fn (gadget a-bar-item a-submenu-item)
+  (declare (ignore gadget a-bar-item a-submenu-item))
   (format t "Setting :family slot to :fixed.~%"))
 #+garnet-debug
-(defun Motif-Serif-Fn (gadget bar-item submenu-item)
-  (declare (ignore gadget bar-item submenu-item))
+(defun Motif-Serif-Fn (gadget a-bar-item a-submenu-item)
+  (declare (ignore gadget a-bar-item a-submenu-item))
   (format t "Setting :family slot to :serif.~%"))
 #+garnet-debug
-(defun Motif-Sans-Serif-Fn (gadget bar-item submenu-item)
-  (declare (ignore gadget bar-item submenu-item))
+(defun Motif-Sans-Serif-Fn (gadget a-bar-item a-submenu-item)
+  (declare (ignore gadget a-bar-item a-submenu-item))
   (format t "Setting :family slot to :sans-serif.~%"))
 
 
@@ -1097,7 +1095,8 @@
 ; The item parameter can be either
 ; 1) An instance of MOTIF-MENU-ITEM, or
 ; 2) A string or atom
-;
+
+(gu:with-muffled-style-warnings
 (define-method :remove-item MOTIF-BAR-ITEM (a-bar-item &optional item
 						 &key (key #'opal:no-func))
   (let* ((a-submenu-item (if (is-a-p item MOTIF-MENU-ITEM)
@@ -1152,7 +1151,7 @@
 	    (let ((new-a-list (remove-item-at-n a-list rank)))
 	      (s-value a-menubar :accelerators
 		       (substitute new-a-list a-list accels))))))
-      )))
+      ))))
 
 (s-value MOTIF-MENUBAR :change-item (g-value opal:aggrelist :change-item))
 (s-value MOTIF-MENUBAR :remove-nth-item

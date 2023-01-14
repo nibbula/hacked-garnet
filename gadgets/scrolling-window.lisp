@@ -134,9 +134,9 @@ Change log:
 
 (in-package "GARNET-GADGETS")
 
-(eval-when (eval load compile)
-  (export '(Scrolling-Window-With-Bars
-            Scrolling-Window-With-Bars-Go Scrolling-Window-With-Bars-Stop)))
+;; (eval-when (eval load compile)
+;;   (export '(Scrolling-Window-With-Bars
+;;             Scrolling-Window-With-Bars-Go Scrolling-Window-With-Bars-Stop)))
 
 ;;; ** Scrolling-window-parts must be loaded first **
 

@@ -156,10 +156,10 @@ Change log:
 
 (in-package "GARNET-GADGETS")
 
-(eval-when (eval load compile)
-  (export '(motif-prop-sheet-with-OK motif-prop-sheet-for-obj-with-OK
-	    Motif-Prop-Sheet-For-Obj-With-Done
-	    Pop-Up-Win-For-Prop Pop-Up-Win-Change-Obj Pop-Up-Win-Change-Items)))
+;; (eval-when (eval load compile)
+;;   (export '(motif-prop-sheet-with-OK motif-prop-sheet-for-obj-with-OK
+;; 	    Motif-Prop-Sheet-For-Obj-With-Done
+;; 	    Pop-Up-Win-For-Prop Pop-Up-Win-Change-Obj Pop-Up-Win-Change-Items)))
 
 (create-instance 'motif-prop-sheet-with-OK opal:aggregadget
     (:maybe-constant '(:left :top :items :default-filter :ok-function

@@ -78,12 +78,12 @@ Change log:
 
 (in-package :GARNET-GADGETS)
 
-(eval-when (eval load compile)
-  (export '(Scrolling-Input-String Insert-Text-Into-Box Insert-Text-Into-SIS))
-  #+garnet-debug
-  (export '(Scrolling-Input-String-Go Scrolling-Input-String-Stop
-	    Scrolling-Input-String-Top-Agg Scrolling-Input-String-Win
-	    Scrolling-Input-String-Obj)))
+;; (eval-when (eval load compile)
+;;   (export '(Scrolling-Input-String Insert-Text-Into-Box Insert-Text-Into-SIS))
+;;   #+garnet-debug
+;;   (export '(Scrolling-Input-String-Go Scrolling-Input-String-Stop
+;; 	    Scrolling-Input-String-Top-Agg Scrolling-Input-String-Win
+;; 	    Scrolling-Input-String-Obj)))
 
 ;;;-------------------------------------------------------------------------
 (in-package :INTERACTORS)
@@ -279,8 +279,10 @@ Change log:
     ; Scroll-Set is defined in the Scrolling-Input-String gadget.
     (inter::scroll-set text-obj new-string new-real-index
 		       new-first-vis-char len)))
-		      
 
+;; @@@ This can't really work because we don't have a device at compile time,
+;; and probably load time.
+#|
 (create-instance 'small-font opal:font (:size :small)(:family :serif))
 (create-instance 'dot-dot-dot opal:text
   (:constant '(:font :string))
@@ -288,6 +290,16 @@ Change log:
   (:string "..."))
 
 (defparameter dot-dot-width (g-value dot-dot-dot :width))
+|#
+
+;; (create-instance 'small-font opal:font (:size :small)(:family :serif))
+(create-instance 'dot-dot-dot opal:text
+  (:constant '(:font :string))
+  (:font (formula (create-instance 'small-font opal:font
+                    (:size :small)(:family :serif))))
+  (:string "..."))
+
+(defparameter dot-dot-width 40) ;; FIXME: make it figure it out at run time
 
 (create-instance 'SCROLLING-INPUT-TEXT-EDIT inter:text-interactor
    (:window (o-formula (gvl :operates-on :window)))
@@ -388,12 +400,20 @@ Change log:
                (:fast-redraw-p ,(o-formula (gvl :parent :fast-redraw-p)))
                (:fast-redraw-filling-style ,(o-formula (gvl :parent :fast-redraw-filling-style))))
       (:dot1 ,dot-dot-dot
+	     ;; ,(formula (create-instance 'dot-dot-dot opal:text
+	     ;; 				(:constant '(:font :string))
+	     ;; 				(:font small-font)
+	     ;; 				(:string "...")))
 	     (:visible ,(o-formula
 			 (and (gvl :parent :visible)
 			      (/= 0 (gvl :parent :string :first-vis-char)))))
 	     (:left ,(o-formula (gvl :parent :left)))
 	     (:top ,(o-formula  (gvl :parent :top))))
       (:dot2 ,dot-dot-dot
+             ;; ,(formula (create-instance 'dot-dot-dot opal:text
+	     ;; 				(:constant '(:font :string))
+	     ;; 				(:font small-font)
+	     ;; 			       (:string "...")))
 	     (:visible ,(o-formula 
 			 (and (gvl :parent :visible)
 			      (/= (gvl :parent :string :last-vis-char)

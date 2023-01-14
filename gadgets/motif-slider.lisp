@@ -63,11 +63,11 @@
 
 (in-package "GARNET-GADGETS")
 
-(eval-when (eval load compile)
-  (export '(Motif-Slider))
-  #+garnet-debug
-  (export '(Motif-Slider-Go Motif-Slider-Stop
-	    Demo-Motif-Slider Motif-Slider-Win Motif-Slider-Top-Agg)))
+;; (eval-when (eval load compile)
+;;   (export '(Motif-Slider))
+;;   #+garnet-debug
+;;   (export '(Motif-Slider-Go Motif-Slider-Stop
+;; 	    Demo-Motif-Slider Motif-Slider-Win Motif-Slider-Top-Agg)))
 
 
 (create-instance 'MOTIF-SLIDER MOTIF-V-SCROLL-BAR

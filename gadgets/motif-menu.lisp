@@ -125,13 +125,13 @@
 
 (in-package "GARNET-GADGETS")
 
-(eval-when (eval load compile)
-  (export '(Motif-Menu Motif-Menu-Accelerator-Inter))
-  #+garnet-debug
-  (export '(Motif-Menu-Go Motif-Menu-Stop
-	    Demo-Motif-Menu Motif-Menu-Win Motif-Menu-Top-Agg))
+;; (eval-when (eval load compile)
+;;   (export '(Motif-Menu Motif-Menu-Accelerator-Inter))
+;;   #+garnet-debug
+;;   (export '(Motif-Menu-Go Motif-Menu-Stop
+;; 	    Demo-Motif-Menu Motif-Menu-Win Motif-Menu-Top-Agg))
 
-  (proclaim '(special MOTIF-BAR-ITEM)))
+(proclaim '(special MOTIF-BAR-ITEM))
 
 (create-instance 'MOTIF-MENU-TEXT-LABEL-PROTOTYPE opal:text
   (:constant '(:actual-heightp))
@@ -412,7 +412,8 @@
 		(when action
 		  (if (AND (g-value gadget :bar-item)
 			   (boundp 'MOTIF-BAR-ITEM)
-			   (is-a-p (g-value gadget :bar-item) MOTIF-BAR-ITEM))
+			   (is-a-p (g-value gadget :bar-item)
+				   (symbol-value 'MOTIF-BAR-ITEM)))
 		      (funcall action
 			       (g-value gadget :bar-item :parent :parent)  ;; The menubar
 			       (g-value gadget :bar-item :menu-obj)  ;; The bar-item
@@ -451,7 +452,8 @@
 	  (when action
 	    (if (AND (g-value gadget :bar-item)
 		     (boundp 'MOTIF-BAR-ITEM)
-		     (is-a-p (g-value gadget :bar-item) MOTIF-BAR-ITEM))
+		     (is-a-p (g-value gadget :bar-item)
+			     (symbol-value 'MOTIF-BAR-ITEM)))
 		(funcall action
 			 (g-value gadget :bar-item :parent :parent)  ;; The menubar
 			 (g-value gadget :bar-item :menu-obj)  ;; The bar-item
@@ -755,7 +757,8 @@
 		(when action
 		  (if (AND (g-value menu :bar-item)
 			   (boundp 'MOTIF-BAR-ITEM)
-			   (is-a-p (g-value menu :bar-item) MOTIF-BAR-ITEM))
+			   (is-a-p (g-value menu :bar-item)
+				   (symbol-value 'MOTIF-BAR-ITEM)))
 		      (funcall action
 			       (g-value menu :bar-item :parent :parent)  ;; The menubar
 			       (g-value menu :bar-item :menu-obj)    ;; The bar-item
@@ -819,41 +822,42 @@ handled manually within the function."
 	   (g-value inst :menu-item-list) rank))))))
 
 
-(define-method :remove-local-item MOTIF-MENU (gadget &optional item
-						     &key (key #'opal:no-func))
-  (let* ((items (or (g-local-value gadget :items)
-		    (copy-list (g-value gadget :items))))
-	 (accels (or (g-local-value gadget :accelerators)
-		    (copy-list (g-value gadget :accelerators))))
-	 (rank (if item
-		   (position item items
-			     :test #'(lambda (x y)
-				       (equal x (funcall key y))))
-		   (1- (length items))))
-	 (alist (g-value gadget :menu-item-list)))
-    ;; Gadgets always have lists for their :items values, so don't consider
-    ;; the case where the value of :items is a number.
-    (s-value alist :old-items
-	     (s-value gadget :items
-		      (opal::delete-elt (or item (nth rank items)) items key)))
-    (if accels
-	(s-value gadget :accels
-		 (opal::delete-elt (nth rank accels) items key)))
-    ;; Before destroying the component, remove the item from it
-    (let* ((comp-to-destroy (nth rank (g-value alist :components))))
-      (if (and (schema-p item)
-	       (g-value item :parent)
-	       (opal::Is-In-Hierarchy comp-to-destroy item))
-	  (let ((kr::*constants-disabled* T))
-	    (opal:remove-local-component (g-value item :parent) item)))
-      (if (g-value comp-to-destroy :parent)
-	  (opal:remove-local-component alist comp-to-destroy))
-      (opal:destroy comp-to-destroy))))
+(gu:with-muffled-style-warnings
+  (define-method :remove-local-item MOTIF-MENU (gadget &optional item
+						       &key (key #'opal:no-func))
+    (let* ((items (or (g-local-value gadget :items)
+		      (copy-list (g-value gadget :items))))
+	   (accels (or (g-local-value gadget :accelerators)
+		       (copy-list (g-value gadget :accelerators))))
+	   (rank (if item
+		     (position item items
+			       :test #'(lambda (x y)
+					 (equal x (funcall key y))))
+		     (1- (length items))))
+	   (alist (g-value gadget :menu-item-list)))
+      ;; Gadgets always have lists for their :items values, so don't consider
+      ;; the case where the value of :items is a number.
+      (s-value alist :old-items
+	       (s-value gadget :items
+			(opal::delete-elt (or item (nth rank items)) items key)))
+      (if accels
+	  (s-value gadget :accels
+		   (opal::delete-elt (nth rank accels) items key)))
+      ;; Before destroying the component, remove the item from it
+      (let* ((comp-to-destroy (nth rank (g-value alist :components))))
+	(if (and (schema-p item)
+		 (g-value item :parent)
+		 (opal::Is-In-Hierarchy comp-to-destroy item))
+	    (let ((kr::*constants-disabled* T))
+	      (opal:remove-local-component (g-value item :parent) item)))
+	(if (g-value comp-to-destroy :parent)
+	    (opal:remove-local-component alist comp-to-destroy))
+	(opal:destroy comp-to-destroy))))
 
 
-(define-method :remove-item MOTIF-MENU (gadget &optional item
-					       &key (key #'opal::no-func))
-    (opal::Gadget-Remove-Item gadget item :menu-item-list key))
+  (define-method :remove-item MOTIF-MENU (gadget &optional item
+						 &key (key #'opal::no-func))
+    (opal::Gadget-Remove-Item gadget item :menu-item-list key)))
 
 (s-value MOTIF-MENU :change-item (g-value opal:aggrelist :change-item))
 (s-value MOTIF-MENU :remove-nth-item (g-value opal:aggrelist :remove-nth-item))

@@ -23,13 +23,14 @@
 
 ;; kr-boolean is now defined in KR itself
 
-(eval-when (eval load compile)
-  (export '(items-type accelerators-type known-as-type filename-type
-	    inter-window-type))
+(eval-when (:compile-toplevel :load-toplevel :execute)
+  ;; (export '(items-type accelerators-type known-as-type filename-type
+  ;; 	    inter-window-type))
 
   (proclaim '(special opal::color opal::bitmap opal::filling-style
 	      opal::line-style opal::font opal::font-from-file opal::aggregate
-	      inter::interactor-window inter::priority-level)))
+	      ;; inter::interactor-window inter::priority-level
+	      )))
 
 ;;;; Named types used in Opal, Interactors, etc.
 
@@ -117,21 +118,21 @@
   '(or (is-a-p opal::filling-style) null)
   "[either an instance of opal:FILLING-STYLE or NIL]")
 
-(def-kr-type WINDOW ()
-  '(is-a-p inter::interactor-window)
-  "[an instance of inter::INTERACTOR-WINDOW]")
+;; (def-kr-type WINDOW ()
+;;   '(is-a-p inter::interactor-window)
+;;   "[an instance of inter::INTERACTOR-WINDOW]")
 
-(def-kr-type WINDOW-OR-NIL ()
-  '(or (is-a-p inter::interactor-window) null)
-  "[either an instance of inter:INTERACTOR-WINDOW or NIL]")
+;; (def-kr-type WINDOW-OR-NIL ()
+;;   '(or (is-a-p inter::interactor-window) null)
+;;   "[either an instance of inter:INTERACTOR-WINDOW or NIL]")
 
 (def-kr-type FONT ()
   '(or (is-a-p opal::font) (is-a-p opal::font-from-file))
   "[either an instance of opal:FONT or opal:FONT-FROM-FILE]")
 
-(def-kr-type PRIORITY-LEVEL ()
-  '(is-a-p inter::priority-level)
-  "[an instance of inter:PRIORITY-LEVEL]")
+;; (def-kr-type PRIORITY-LEVEL ()
+;;   '(is-a-p inter::priority-level)
+;;   "[an instance of inter:PRIORITY-LEVEL]")
 
 (def-kr-type AGGREGATE ()
   '(is-a-p opal::aggregate)
@@ -176,7 +177,7 @@
 
 (def-kr-type '(OR NULL (SATISFIES SCHEMA-P)))
 
-(def-kr-type '(OR LIST (IS-A-P inter::INTERACTOR-WINDOW)))
+;; (def-kr-type '(OR LIST (IS-A-P inter::INTERACTOR-WINDOW)))
 
 (def-kr-type '(OR NUMBER NULL))
 
@@ -200,6 +201,8 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;; @@@ moved to gadgets/package
+#|
 (in-package "GARNET-GADGETS")
 
 (def-kr-type '(OR NULL STRING KEYWORD (SATISFIES SCHEMA-P)))
@@ -211,12 +214,13 @@
 (def-kr-type '(OR NULL KEYWORD CHARACTER))
 
 (def-kr-type '(SATISFIES CHECK-MENUBAR-ITEMS))
-
-
+|#
 
 
 ;;;;;;;;;;;;;;;;;; Types specifically for inter::interactor ;;;;;;;;;;;;;;;;
 
+;; @@@ moved to ../inter/i-windows.lisp
+#|
 (in-package "INTER")
 
 (defun list-of-wins-p (l)
@@ -232,3 +236,4 @@
     (member T)
     (satisfies list-of-wins-p)))
 
+|#

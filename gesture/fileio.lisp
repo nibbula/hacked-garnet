@@ -26,8 +26,8 @@ Change log:
 ============================================================
 |#
 
-(in-package "INTERACTORS")
-
+;;(in-package "INTERACTORS")
+(in-package :gesture)
 
 ;; gest-classifier-read returns the classifier and class examples 
 ;; (if present -- in items lists format) read from the given file.

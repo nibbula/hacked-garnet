@@ -200,7 +200,7 @@ Change log:
   (unless (eq if-exists :append)
     (Format *trans-to-file*
 	    "Transcript of Garnet session from ~a.  Garnet Version = ~a~%"
-	    (Time-To-String) User::Garnet-Version-Number)
+	    (Time-To-String) garnet-User::Garnet-Version-Number)
     (format *trans-to-file*
 	    "Form for events: CHAR CODE MOUSEP DOWNP X Y TIME WIN-INDEX~%")
     (Format *trans-to-file* "Windows are:~%")
@@ -383,10 +383,10 @@ Change log:
       T)))
 
 
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Interactor Windows
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
+
 
 (create-schema 'INTERACTOR-WINDOW
   :declare ((:parameters :left top :width :height :border-width
@@ -536,8 +536,7 @@ Change log:
       (trans-out-and-process-current-event)))
   t)
 
-
-(defun Queue-Timer-Event (inter)
+(defmethod Queue-Timer-Event ((receiver interactor-receiver) inter)
   (if-debug :event
 	    (format t "~%<><><><> Timer Event, Inter Index=~s~%" inter))
   ;; only need the event for the transcripting
@@ -564,7 +563,8 @@ Change log:
     (when (or (null window)  ;; if window was just destroyed, exit.
               (null code))   ;; if bad double press (Mac) then exit
       (return-from button-press t))
-    (setf c (gem:translate-mouse-character window code state event-key))
+    (setf c (gem:translate-mouse-character gem:*event-receiver*
+					   window code state event-key))
     (if-debug
      :event 
      (format
@@ -591,7 +591,8 @@ Change log:
   ;; Check for null window before getting GEM:TRANSLATE-MOUSE-CHARACTER code.
   (when (null window)			; if window was just destroyed, exit.
     (return-from button-release t))
-  (let ((c (gem:translate-mouse-character window code state event-key)))
+  (let ((c (gem:translate-mouse-character gem:*event-receiver*
+					  window code state event-key)))
     (when (null window)
       (return-from button-release t))  ;; if window was just destroyed, exit.
     (if-debug :event 
@@ -717,15 +718,20 @@ Change log:
 ;;;;;;;;
 
 
-(defun do-button-press (a-window x y state code time event-key)
+;;(defun do-button-press (a-window x y state code time event-key)
+(defmethod do-button-press ((receiver interactor-receiver)
+			    a-window x y state code time event-key)
+  (declare (ignore receiver))
   (if *trans-from-file*
     T					; ignore events when read transcript
     (if (katie-event? a-window)
       (Katie-Button-Press a-window x y state code event-key time)
       (Button-Press a-window x y state code event-key time))))
 
-
-(defun do-button-release (a-window x y state code time event-key)
+;;(defun do-button-release (a-window x y state code time event-key)
+(defmethod do-button-release ((receiver interactor-receiver)
+			      a-window x y state code time event-key)
+  (declare (ignore receiver))
   (if *trans-from-file*
     T					;ignore events when read trnscript
     (if (katie-event? a-window)
@@ -733,19 +739,27 @@ Change log:
       (Button-Release a-window x y state code event-key time))))
 
 
-(defun do-circulate-notify ()
+;;(defun do-circulate-notify ()
+(defmethod do-circulate-notify ((receiver interactor-receiver))
+  (declare (ignore receiver))
   (opal::Circulate-Notify (debug-p :event)))
 
 
 
-(defun do-configure-notify (event-window x y width height above-sibling)
+;;(defun do-configure-notify (event-window x y width height above-sibling)
+(defmethod do-configure-notify ((receiver interactor-receiver)
+				a-window x y width height above-sibling)
+  (declare (ignore receiver))
   (opal::Configure-Notify (debug-p :event) x y
 			  width height
-			  event-window above-sibling))
+			  a-window above-sibling))
 
 
 
-(defun do-enter-notify (a-window x y time)
+;;(defun do-enter-notify (a-window x y time)
+(defmethod do-enter-notify ((receiver interactor-receiver)
+			    a-window x y time)
+  (declare (ignore receiver))
   (if *trans-from-file*
     T					; ignore events when read transcript
     (if (katie-event? a-window)
@@ -753,16 +767,24 @@ Change log:
       (Window-Enter a-window x y time))))
 
 
-(defun do-exposure (event-window x y width height count display)
-  (opal::Exposure (debug-p :event) event-window count x y
+;;(defun do-exposure (event-window x y width height count display)
+(defmethod do-exposure ((receiver interactor-receiver)
+			a-window x y width height count display)
+  (declare (ignore receiver))
+  (opal::Exposure (debug-p :event) a-window count x y
 		  width height display))
 
 
-(defun do-gravity-notify ()
+;;(defun do-gravity-notify ()
+(defmethod do-gravity-notify ((receiver interactor-receiver))
+  (declare (ignore receiver))
   (opal::Gravity-Notify (debug-p :event)))
 
 
-(defun do-key-press (a-window x y state code time)
+;;(defun do-key-press (a-window x y state code time)
+(defmethod do-key-press ((receiver interactor-receiver)
+			 a-window x y state code time)
+  (declare (ignore receiver))
   (if *trans-from-file*
     T					; ignore events when read transcript
     (if (katie-event? a-window)
@@ -770,7 +792,10 @@ Change log:
       (Key-Press a-window x y state code time))))
 
 
-(defun do-leave-notify (a-window x y time)
+;;(defun do-leave-notify (a-window x y time)
+(defmethod do-leave-notify ((receiver interactor-receiver)
+			    a-window x y time)
+  (declare (ignore receiver))
   (if *trans-from-file*
     T					; ignore events when read transcript
     (if (katie-event? a-window)
@@ -778,11 +803,17 @@ Change log:
       (Window-Leave a-window x y time))))
 
 
-(defun do-map-notify (event-window)
-  (opal::Map-Notify (debug-p :event) event-window))
+;;(defun do-map-notify (event-window)
+(defmethod do-map-notify ((receiver interactor-receiver)
+			  window)
+  (declare (ignore receiver))
+  (opal::Map-Notify (debug-p :event) window))
 
 
-(defun do-motion-notify (a-window x y display)
+;;(defun do-motion-notify (a-window x y display)
+(defmethod do-motion-notify ((receiver interactor-receiver)
+			     a-window x y display)
+  (declare (ignore receiver))
   (if *trans-from-file*
     T					; ignore events when read transcript
     (if (katie-event? a-window)
@@ -790,7 +821,10 @@ Change log:
       (Motion-Notify a-window x y))))
 
 
-(defun do-unmap-notify (a-window)
+;;(defun do-unmap-notify (a-window)
+(defmethod do-unmap-notify ((receiver interactor-receiver)
+			    a-window)
+  (declare (ignore receiver))
   (opal::Unmap-Notify (debug-p :event) a-window))
 
 
@@ -824,7 +858,7 @@ Change log:
 ;;; Now that default-event-handler is defined, launch it for non-CMUCL.
 ;;; launch-process-p is defined in garnet-loader.lisp
 #-(and cmu (not mp))
-(when user::launch-process-p
+(when garnet-user::launch-process-p
   (opal:launch-main-event-loop-process))
 
 

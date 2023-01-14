@@ -77,11 +77,11 @@
 
 (in-package "GARNET-GADGETS")
 
-(eval-when (eval load compile)
-  (export '(H-Slider))
-  #+garnet-debug
-  (export '(H-Slider-Go H-Slider-Stop
-	    H-Slider-Win H-Slider-Top-Agg H-Slider-Obj)))
+;; (eval-when (eval load compile)
+;;   (export '(H-Slider))
+;;   #+garnet-debug
+;;   (export '(H-Slider-Go H-Slider-Stop
+;; 	    H-Slider-Win H-Slider-Top-Agg H-Slider-Obj)))
 
 (create-instance 'H-SLIDER-VALUE-FEEDBACK opal:aggregadget
    (:left (o-formula (gv (kr-path 0 :parent) :left)))
@@ -233,7 +233,7 @@
    (:scroll-p T)
    (:value-feedback-p T) ;; Whether to report slider position beside shaft
    (:value-feedback-font opal:default-font)
-   (:enum-font (opal:get-standard-font NIL NIL :small))
+   (:enum-font (formula (opal:get-standard-font NIL NIL :small)))
    (:format-string "~a")
    (:enum-format-string "~a")
    (:selection-function NIL)

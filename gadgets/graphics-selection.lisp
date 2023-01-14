@@ -103,8 +103,8 @@
 
 (in-package "GARNET-GADGETS")
 
-(eval-when (eval load compile)
-  (export '(Graphics-Selection)))
+;; (eval-when (eval load compile)
+;;   (export '(Graphics-Selection)))
 
 ;; These are the size of the selection boxes
 (defparameter size 7)  ; should be odd

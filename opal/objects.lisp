@@ -138,14 +138,14 @@
 
 (define-method :draw opal:line (gob a-window)
   (let* ((update-vals  (g-local-value gob :update-slots-values))
-	 (lstyle (aref update-vals *line-lstyle*)))
+	 (lstyle (aref update-vals +line-lstyle+)))
     (if lstyle
       (gem:draw-line a-window
-		     (aref update-vals *line-x1*)
-		     (aref update-vals *line-y1*)
-		     (aref update-vals *line-x2*)
-		     (aref update-vals *line-y2*)
-		     (aref update-vals *line-draw-function*)
+		     (aref update-vals +line-x1+)
+		     (aref update-vals +line-y1+)
+		     (aref update-vals +line-x2+)
+		     (aref update-vals +line-y2+)
+		     (aref update-vals +line-draw-function+)
 		     lstyle))))
 
 
@@ -206,12 +206,12 @@
 ;;; Rectangles
 (define-method :draw opal:rectangle (gob a-window)
   (let* ((update-vals (g-local-value gob :update-slots-values))
-	 (width (aref update-vals opal::*rect-width*))
-	 (height (aref update-vals opal::*rect-height*))
+	 (width (aref update-vals opal::+rect-width+))
+	 (height (aref update-vals opal::+rect-height+))
 	 (min-width-height (min width height))
-	 (fstyle (aref update-vals opal::*rect-fstyle*))
-	 (lstyle (aref update-vals opal::*rect-lstyle*))
-	 (thickness (opal::get-old-thickness gob opal::*rect-lstyle*
+	 (fstyle (aref update-vals opal::+rect-fstyle+))
+	 (lstyle (aref update-vals opal::+rect-lstyle+))
+	 (thickness (opal::get-old-thickness gob opal::+rect-lstyle+
 					     update-vals)))
     (when (plusp min-width-height)	; only draw if width, height > 0
       (if (>= (* 2 thickness) min-width-height) ; if rectangle too small,
@@ -219,10 +219,10 @@
 	(setf lstyle nil
 	      fstyle opal:black-fill))
       (gem:draw-rectangle a-window
-			  (aref update-vals opal::*rect-left*)
-			  (aref update-vals opal::*rect-top*)
+			  (aref update-vals opal::+rect-left+)
+			  (aref update-vals opal::+rect-top+)
 			  width height
-			  (aref update-vals opal::*rect-draw-function*)
+			  (aref update-vals opal::+rect-draw-function+)
 			  lstyle fstyle))))
 
 
@@ -291,11 +291,11 @@
 ;;; 
 (define-method :draw opal:multipoint (gob a-window)
   (let* ((update-vals  (g-local-value gob :update-slots-values))
-	 (point-list (aref update-vals *multi-point-list*)))
+	 (point-list (aref update-vals +multi-point-list+)))
     (when point-list
       (gem:draw-points a-window point-list
-		       (aref update-vals *multi-draw-function*)
-		       (aref update-vals *multi-lstyle*)))))
+		       (aref update-vals +multi-draw-function+)
+		       (aref update-vals +multi-lstyle+)))))
 
 
 (define-method :rotate opal:multipoint (gob angle &optional
@@ -320,12 +320,12 @@
 
 (define-method :draw opal:polyline (gob a-window)
   (let* ((update-vals (g-local-value gob :update-slots-values))
-	 (point-list (aref update-vals *polyline-point-list*)))
+	 (point-list (aref update-vals +polyline-point-list+)))
     (when point-list
       (gem:draw-lines a-window point-list
-		      (aref update-vals *polyline-draw-function*)
-		      (aref update-vals *polyline-lstyle*)
-		      (aref update-vals *polyline-fstyle*)))))
+		      (aref update-vals +polyline-draw-function+)
+		      (aref update-vals +polyline-lstyle+)
+		      (aref update-vals +polyline-fstyle+)))))
 
 
 ;;; Returns T if point <x2,y2> is within distance "threshold" of the line
@@ -393,17 +393,17 @@
 
 (define-method :draw opal:bitmap (gob a-window)
   (let* ((update-vals (g-local-value gob :update-slots-values))
-	 (image (aref update-vals *bm-image*)))
+	 (image (aref update-vals +bm-image+)))
     (when image
       (multiple-value-bind (width height)
 	  (gem:image-size a-window image)
 	(gem:draw-image a-window
-			(aref update-vals *bm-left*)
-			(aref update-vals *bm-top*)
+			(aref update-vals +bm-left+)
+			(aref update-vals +bm-top+)
 			width height
 			image
-			(aref update-vals *bm-draw-function*)
-			(aref update-vals *bm-fstyle*))))))
+			(aref update-vals +bm-draw-function+)
+			(aref update-vals +bm-fstyle+))))))
 
 
 (defun image-bit-on? (image x y root-window)
@@ -430,15 +430,15 @@
 (define-method :draw opal:arc (gob a-window)
   (let ((update-vals (g-local-value gob :update-slots-values)))
     (gem:draw-arc a-window
-		  (aref update-vals opal::*arc-left*)
-		  (aref update-vals opal::*arc-top*)
-		  (aref update-vals opal::*arc-width*)
-		  (aref update-vals opal::*arc-height*)
-		  (aref update-vals opal::*arc-angle1*)
-		  (aref update-vals opal::*arc-angle2*)
-		  (aref update-vals opal::*arc-draw-function*)
-		  (aref update-vals opal::*arc-lstyle*)
-		  (aref update-vals opal::*arc-fstyle*))))
+		  (aref update-vals opal::+arc-left+)
+		  (aref update-vals opal::+arc-top+)
+		  (aref update-vals opal::+arc-width+)
+		  (aref update-vals opal::+arc-height+)
+		  (aref update-vals opal::+arc-angle1+)
+		  (aref update-vals opal::+arc-angle2+)
+		  (aref update-vals opal::+arc-draw-function+)
+		  (aref update-vals opal::+arc-lstyle+)
+		  (aref update-vals opal::+arc-fstyle+))))
 
 
 (define-method :rotate opal:arc (gob &optional center-x center-y)
@@ -453,10 +453,10 @@
 ;;
 (defun normalize-angle (angle)
   (if (< angle 0)
-      (decf angle (* (truncate (/ (- angle *twopi*) *twopi*))
-		     *twopi*))
-    (if (> angle *twopi*)
-	(decf angle (* (truncate (/ angle *twopi*)) *twopi*))))
+      (decf angle (* (truncate (/ (- angle +twopi+) +twopi+))
+		     +twopi+))
+    (if (> angle +twopi+)
+	(decf angle (* (truncate (/ angle +twopi+)) +twopi+))))
   angle)
 
 	
@@ -514,21 +514,21 @@
 ;;;
 (define-method :draw opal:oval (gob a-window)
   (let* ((update-vals (g-local-value gob :update-slots-values))
-	 (left   (aref update-vals *arc-left*))
-	 (top    (aref update-vals *arc-top*))
-	 (width  (aref update-vals *arc-width*))
-	 (height (aref update-vals *arc-height*))
-	 (lstyle (aref update-vals *arc-lstyle*))
-	 (fstyle (aref update-vals *arc-fstyle*))
-	 (thickness (get-old-thickness gob *arc-lstyle* update-vals))
+	 (left   (aref update-vals +arc-left+))
+	 (top    (aref update-vals +arc-top+))
+	 (width  (aref update-vals +arc-width+))
+	 (height (aref update-vals +arc-height+))
+	 (lstyle (aref update-vals +arc-lstyle+))
+	 (fstyle (aref update-vals +arc-fstyle+))
+	 (thickness (get-old-thickness gob +arc-lstyle+ update-vals))
 	 (fill-width (- width (* 2 thickness)))
 	 (fill-height (- height (* 2 thickness))))
     (when (and (plusp width) (plusp height)) ; only draw if width, height > 0
       (if (or (< fill-width 1) (< fill-height 1))
 	;; if oval too small, just draw black oval
 	(setf fstyle opal:black-fill))
-      (gem:draw-arc a-window left top width height 0.0 *twopi*
-		    (aref update-vals *arc-draw-function*) lstyle fstyle))))
+      (gem:draw-arc a-window left top width height 0.0 +twopi+
+		    (aref update-vals +arc-draw-function+) lstyle fstyle))))
 
 
 (define-method :point-in-gob opal:oval (gob x y)
@@ -553,11 +553,11 @@
 
 (define-method :draw opal:circle (gob a-window)
   (let* ((update-vals (g-local-value gob :update-slots-values))
-	 (width  (aref update-vals opal::*circle-width*))
-	 (height (aref update-vals opal::*circle-height*))
-	 (lstyle (aref update-vals opal::*circle-lstyle*))
-	 (fstyle (aref update-vals opal::*circle-fstyle*))
-	 (thickness (opal::get-old-thickness gob opal::*circle-lstyle*
+	 (width  (aref update-vals opal::+circle-width+))
+	 (height (aref update-vals opal::+circle-height+))
+	 (lstyle (aref update-vals opal::+circle-lstyle+))
+	 (fstyle (aref update-vals opal::+circle-fstyle+))
+	 (thickness (opal::get-old-thickness gob opal::+circle-lstyle+
 					     update-vals))
 	 (diameter (min width height))
 	 (fill-diameter (- diameter (* 2 thickness))))
@@ -567,10 +567,10 @@
 	  (setf lstyle nil
 		fstyle opal:black-fill))
       (gem:draw-arc a-window
-		(aref update-vals opal::*circle-left*)
-		(aref update-vals opal::*circle-top*)
-		diameter diameter 0.0 opal::*twopi*
-		(aref update-vals opal::*circle-draw-function*)
+		(aref update-vals opal::+circle-left+)
+		(aref update-vals opal::+circle-top+)
+		diameter diameter 0.0 opal::+twopi+
+		(aref update-vals opal::+circle-draw-function+)
 		lstyle fstyle))))
 
 

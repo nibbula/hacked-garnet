@@ -84,13 +84,12 @@ Change log:
 
 (in-package "GARNET-GADGETS")
 
-(eval-when (eval load compile)
-  (export '(Polyline-Creator Stop-Polyline-Creator Abort-Polyline-Creator
-	    Toggle-Polyline-Handles Destroy-Polyline-Handles
-	    Hide-Polyline-Handles))
-
-  #+garnet-debug
-  (export '(Polyline-Creator-demo-go Polyline-Creator-demo-stop)))
+;; (eval-when (eval load compile)
+;;   (export '(Polyline-Creator Stop-Polyline-Creator Abort-Polyline-Creator
+;; 	    Toggle-Polyline-Handles Destroy-Polyline-Handles
+;; 	    Hide-Polyline-Handles))
+;;   #+garnet-debug
+;;   (export '(Polyline-Creator-demo-go Polyline-Creator-demo-stop)))
 
 (defun close-enough (point1 point2 close-enough-value)
   (and (<= (abs (- (car point1)(car point2))) close-enough-value)

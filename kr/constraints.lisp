@@ -15,13 +15,13 @@
 (in-package "KR")
 
 
-(eval-when (eval compile load)
-  (proclaim '(special user::*default-garnet-proclaim*))
-  (if (boundp 'user::*default-garnet-proclaim*)
-      (if user::*default-garnet-proclaim*
-        (proclaim user::*default-garnet-proclaim*))
-      (proclaim '(optimize (safety 0) (space 0)
-		  (speed #-LUCID 3 #+LUCID 2) #+ALLEGRO (debug 0)))))
+;; (eval-when (eval compile load)
+;;   (proclaim '(special user::*default-garnet-proclaim*))
+;;   (if (boundp 'user::*default-garnet-proclaim*)
+;;       (if user::*default-garnet-proclaim*
+;;         (proclaim user::*default-garnet-proclaim*))
+;;       (proclaim '(optimize (safety 0) (space 0)
+;; 		  (speed #-LUCID 3 #+LUCID 2) #+ALLEGRO (debug 0)))))
 
 
 
@@ -97,7 +97,8 @@
   latter case, the other formula is made the parent, and this function
   creates an inherited formula.  The <initial-value>, which defaults to nil,
   is used as the initial cached value before the formula is evaluated."
-  (locally (declare (optimize (speed 3) (space 0) #+(or ALLEGRO APPLE) (debug 0)))
+  (locally
+      ;; (declare (optimize (speed 3) (space 0) #+(or ALLEGRO APPLE) (debug 0)))
     (let ((formula (make-new-formula)))
     (setf (schema-name formula) (incf *schema-counter*))
     (setf (cached-value formula) initial-value)
@@ -141,7 +142,8 @@
 
 
 (defun prepare-formula (initial-value)
-  (locally (declare (optimize (speed 3) (space 0) #+(or ALLEGRO APPLE) (debug 0)))
+  (locally
+      ;; (declare (optimize (speed 3) (space 0) #+(or ALLEGRO APPLE) (debug 0)))
   (let ((formula (make-new-formula)))
     (setf (schema-name formula) (incf *schema-counter*))
     (setf (cached-value formula) initial-value)
@@ -172,9 +174,9 @@
     (cond ((listp form)
 	   `(o-formula-fn (function
 			   (lambda ()
-			    (declare (optimize (safety 1) (space 0)
-					       (speed #-LUCID 3 #+LUCID 2)
-					       #+(or ALLEGRO MCL) (debug 0)))
+			    ;; (declare (optimize (safety 1) (space 0)
+			    ;; 		       (speed #-LUCID 3 #+LUCID 2)
+			    ;; 		       #+(or ALLEGRO MCL) (debug 0)))
 			    ,form))
 	     ,(if *store-lambdas* `(quote ,form) nil)
 	     ,initial-value
@@ -374,7 +376,8 @@
 ;;; dependencies at the end.
 ;;;
 (defun gv-value-fn (schema slot)
-  (locally (declare (optimize (speed 3) (space 0) #+(or ALLEGRO APPLE) (debug 0)))
+  (locally
+      ;;(declare (optimize (speed 3) (space 0) #+(or ALLEGRO APPLE) (debug 0)))
   #+GARNET-DEBUG
   (unless (or *current-formula* (schema-p schema))
     (cerror "Return NIL" "  GV attempted on the non-object ~S (slot ~S)."
@@ -435,7 +438,8 @@
   (let ((entry (gensym))
 	(value (gensym))
 	(the-value (gensym)))
-    `(locally (declare ,*special-kr-optimization*)
+    `(locally
+	 ;; (declare ,*special-kr-optimization*)
       (if (eq schema :self)
 	(setf schema *schema-self*))
       ;; Handle special relation slots which return a list of values.  In this
@@ -755,7 +759,8 @@ Found in the expression   (gv ~S~{ ~S~}) ,~:[
 ;;; dotted pairs, where each pair consists of a schema and a slot.
 ;;;
 (defun i-depend-on (object slot)
-  (locally (declare (optimize (speed 3) (space 0) #+(or ALLEGRO APPLE) (debug 0)))
+  (locally
+      ;; (declare (optimize (speed 3) (space 0) #+(or ALLEGRO APPLE) (debug 0)))
   (if (schema-p object)
     (let ((formula (get-value object slot))
 	  (dependencies nil))

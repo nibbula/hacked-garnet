@@ -93,11 +93,11 @@
 
 (in-package "GARNET-GADGETS")
 
-(eval-when (eval load compile)
-  (export '(Arrow-Line Double-Arrow-Line)))
-#+garnet-debug
-(eval-when (eval load compile)
-  (export '(arrow-line-go arrow-line-stop arrow-line-win arrow-line-agg)))
+;; (eval-when (eval load compile)
+;;   (export '(Arrow-Line Double-Arrow-Line)))
+;; #+garnet-debug
+;; (eval-when (eval load compile)
+;;   (export '(arrow-line-go arrow-line-stop arrow-line-win arrow-line-agg)))
 
 ;;
 ;; Functions to determine whether the point (x,y) is inside the object

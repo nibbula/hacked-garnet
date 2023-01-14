@@ -52,7 +52,7 @@ Change log:
 ;;; Default Procedures to go into the slots
 ;;;============================================================
 
-(eval-when (eval load compile)
+(eval-when (:compile-toplevel :load-toplevel :execute)
   (proclaim '(special Animator-Interactor)))
 
 (defun Animator-Interactor-Initialize (new-Animator-schema)

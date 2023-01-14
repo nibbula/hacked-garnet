@@ -129,6 +129,58 @@ Grahpical objects for Garnet.")
    #:SCALABLE-AGGREGRAPH-IMAGE-LINK-PROTOTYPE
    #:SCALABLE-AGGREGRAPH #:SCALABLE-AGGREGRAPH-NODE-PROTOTYPE
    #:SCALABLE-AGGREGRAPH-LINK-PROTOTYPE
+
+   ;; multifont
+   #:multifont-text
+   #:set-cursor-visible
+   #:set-cursor-to-x-y-position
+   #:set-cursor-to-line-char-position
+   #:get-cursor-line-char-position
+   #:go-to-next-char
+   #:go-to-prev-char
+   #:go-to-next-word
+   #:go-to-prev-word
+   #:go-to-next-line
+   #:go-to-prev-line
+   #:go-to-beginning-of-text
+   #:go-to-end-of-text
+   #:go-to-beginning-of-line
+   #:go-to-end-of-line
+   #:fetch-next-char
+   #:fetch-prev-char
+   #:toggle-selection
+   #:set-selection-to-x-y-position
+   #:set-selection-to-line-char-position
+   #:get-selection-line-char-position
+   #:change-font-of-selection
+   #:change-color-of-selection
+   #:add-char
+   #:delete-char
+   #:delete-prev-char
+   #:insert-string
+   #:add-object
+   #:search-for-mark
+   #:search-backwards-for-mark
+   #:between-marks-p
+   #:mark
+   #:insert-mark
+   #:insert-text
+   #:delete-substring
+   #:delete-word
+   #:delete-prev-word
+   #:kill-rest-of-line
+   #:copy-selected-text
+   #:delete-selection
+   #:set-text
+   #:get-string
+   #:get-text
+   #:get-objects
+   #:notice-resize-object
+   #:text-to-pure-list
+   #:pure-list-to-text
+   #:text-to-string
+   #:concatenate-text
+   #:empty-text-p
    ))
 (in-package :opal)
 

@@ -122,6 +122,7 @@
 
 
 ;;; This is the export list for *some* of OPAL
+#|
 (eval-when (eval load compile)
   (export '(bottom right center-x center-y
 	    gv-bottom gv-right gv-center-x gv-center-y
@@ -212,12 +213,13 @@
 	    
 	    get-standard-font
 	    )))
+|#
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;; DefConstants ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defconstant *twopi* (min (* 2 pi) (coerce (* 2 pi) 'short-float)))
+(defconstant +twopi+ (min (* 2 pi) (coerce (* 2 pi) 'short-float)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;; DefParameters ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -429,6 +431,10 @@
   root-window
   line-style-gc
   filling-style-gc)
+
+;; modularity hack
+(defmethod gem::%display-info-display ((info display-info))
+  (display-info-display info))
 
 ;;; This defstruct generates the functions Make-Cut-String, Copy-Cut-String,
 ;;; Cut-String-String, Cut-String-Width, and Cut-String-Left-Bearing.

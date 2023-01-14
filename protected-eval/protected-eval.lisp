@@ -172,15 +172,13 @@ Change Log:
 
 (in-package "GARNET-GADGETS")
 
-(export '(protected-eval-error-gadget
-	  garnet-error-handler garnet-user-error-hander
-	  with-garnet-error-handling with-garnet-user-error-handling
-	  garnet-protected-eval garnet-protected-read-from-string
-	  garnet-protected-read do-prompt error-prompter-gadget
-	  with-normal-cursor *normal-cursor-pair*
-	  ))
-
-
+;; (export '(protected-eval-error-gadget
+;; 	  garnet-error-handler garnet-user-error-hander
+;; 	  with-garnet-error-handling with-garnet-user-error-handling
+;; 	  garnet-protected-eval garnet-protected-read-from-string
+;; 	  garnet-protected-read do-prompt error-prompter-gadget
+;; 	  with-normal-cursor *normal-cursor-pair*
+;; 	  ))
 
 ;;; Assumes garnet loader already loaded.
 
@@ -294,7 +292,7 @@ invoked with (handler-bind ((error #'(lambda (condition)
 Note that this is like the garnet-error-handler without the option to
 continue. 
 "
-  (garnet-error-handler context condition :allow-debug nil))
+  (garnet-error-handler context condition :allow-debugger nil))
 
 
 
@@ -446,7 +444,7 @@ garnet-protected-eval).
 	     (values ,abort-val :abort)))))
     (eval handled-form)))
 
-
+(gu:with-muffled-style-warnings
 (defun garnet-protected-read
     (&optional (stream *query-io*)
      &key (context (format nil "Reading from ~S" stream))
@@ -508,7 +506,7 @@ garnet-protected-eval).
 	     :report (lambda (s)
 		       (format s "Return value ~S" ,abort-val))
 	     (values ,abort-val :abort)))))
-    (eval handled-form)))
+    (eval handled-form))))
 
 (kr:create-instance 'Error-Prompter-Gadget Prompter-Gadget
   #+kr-doc
@@ -518,14 +516,18 @@ prompting for a value to use/store.")
   (:modal-p T)
   (:beep-p T)
   (:parent-window nil)
-  (:window-top (floor opal:*screen-height* 2))
-  (:window-left (floor opal:*screen-width* 2)))
-
+  ;; (:window-top (floor opal:*screen-height* 2))
+  ;; (:window-left (floor opal:*screen-width* 2)))
+  ;; (:window-top (formula (floor opal:*screen-height* 2)))
+  ;; (:window-left (formula (floor opal:*screen-width* 2))))
+  ;; (:window-top (formula (floor (symbol-value '*screen-height*) 2)))
+  ;; (:window-left (formula (floor (symbol-value '*screen-width*) 2)))
+  )
 
 (defun do-prompt (prompt &key (local-abort nil)
 		      (default-value nil dv?)
 		      (abort-val :ABORT)
-		      (satisfy-test #'(lambda (obj) T))
+		      (satisfy-test #'(lambda (obj) (declare (ignore obj)) T))
 		      (eval-input? nil)
 		      (allow-eval? (not eval-input?))
 		 &aux flag form val test?)

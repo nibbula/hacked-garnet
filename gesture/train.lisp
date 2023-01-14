@@ -35,18 +35,21 @@ Change log:
 |#
 
 
-(in-package "INTERACTORS")
+;; (in-package "INTERACTORS")
+(in-package :gesture)
 
+#|
 (eval-when (eval load compile)
   (export '(gest-add-example
 	    gest-classifier-train
 	    gest-done-adding 
 	    gest-remove-example
 	    gest-strip-sumcov)))
+|#
 
 
 ;; constant definitions
-(defconstant EPS-SM 1.0e-6)     ;; for singular matrix check
+(defconstant +EPS-SM+ 1.0e-6)     ;; for singular matrix check
 
 
 ;; global variables definitions
@@ -360,7 +363,7 @@ Change log:
 
         ;; check to make sure it was invertible (i.e. not singular!)
         ;; if it wasn't make it invertible by throwing out features
-        (when (<= (abs det) EPS-SM)
+        (when (<= (abs det) +EPS-SM+)
             (fix-classifier classifier avgcov)
 	    ;; *** WORK *** remove if implement fix-classifier	    
 	    (setf result 'FIX)

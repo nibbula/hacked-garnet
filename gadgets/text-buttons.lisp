@@ -106,12 +106,11 @@
 
 (in-package "GARNET-GADGETS")
 
-(eval-when (eval load compile)
-  (export '(Text-Button Text-Button-Panel))
-  #+garnet-debug
-  (export '(Text-Buttons-Go Text-Buttons-Stop Text-Button-Obj
-	    Text-Buttons-Obj Text-Buttons-Top-Agg Text-Buttons-Win
-	    Text-Button-Obj1)))
+;; (eval-when (eval load compile)
+;;   (export '(Text-Button Text-Button-Panel))
+;;   (export '(Text-Buttons-Go Text-Buttons-Stop Text-Button-Obj
+;; 	    Text-Buttons-Obj Text-Buttons-Top-Agg Text-Buttons-Win
+;; 	    Text-Button-Obj1)))
 
 ;;;  IN-BUTTON-TEXT:  This text object is laid on top of the white rectangle
 ;;; 
@@ -394,13 +393,14 @@
   (opal::Gadget-Add-Local-Item gadget item :text-button-list args))
 (define-method :add-item TEXT-BUTTON-PANEL (gadget item &rest args)
   (opal::Gadget-Add-Item gadget item :text-button-list args))
-   
-(define-method :remove-local-item TEXT-BUTTON-PANEL
-               (gadget &optional item &key (key #'opal:no-func))
-  (opal::Gadget-Remove-Local-Item gadget item :text-button-list key))
-(define-method :remove-item TEXT-BUTTON-PANEL
-               (gadget &optional item &key (key #'opal:no-func))
-  (opal::Gadget-Remove-Item gadget item :text-button-list key))
+
+(gu:with-muffled-style-warnings   
+  (define-method :remove-local-item TEXT-BUTTON-PANEL
+                 (gadget &optional item &key (key #'opal:no-func))
+    (opal::Gadget-Remove-Local-Item gadget item :text-button-list key))
+  (define-method :remove-item TEXT-BUTTON-PANEL
+                 (gadget &optional item &key (key #'opal:no-func))
+    (opal::Gadget-Remove-Item gadget item :text-button-list key)))
 
 (s-value TEXT-BUTTON-PANEL :change-item
 	 (g-value opal:aggrelist :change-item))

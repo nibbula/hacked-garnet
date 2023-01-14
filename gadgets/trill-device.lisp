@@ -69,11 +69,11 @@
 
 (in-package "GARNET-GADGETS")
 
-(eval-when (eval load compile)
-  (export '(Trill-Device))
-  #+garnet-debug
-  (export '(Trill-Go Trill-Stop
-	    Trill-Top-Agg Trill-Win Trill-Obj)))
+;; (eval-when (eval load compile)
+;;   (export '(Trill-Device))
+;;   #+garnet-debug
+;;   (export '(Trill-Go Trill-Stop
+;; 	    Trill-Top-Agg Trill-Win Trill-Obj)))
 
 
 (create-instance 'DEVICE-FEEDBACK opal:aggregadget

@@ -57,11 +57,11 @@
 
 (in-package "GARNET-GADGETS")
 
-(eval-when (eval load compile)
-  (export '(Labeled-Box))
-  #+garnet-debug
-  (export '(Labeled-Box-Go Labeled-Box-Stop
-	    Labeled-Box-Win Labeled-Box-Top-Agg Labeled-Box-Obj)))
+;; (eval-when (eval load compile)
+;;   (export '(Labeled-Box))
+;;   #+garnet-debug
+;;   (export '(Labeled-Box-Go Labeled-Box-Stop
+;; 	    Labeled-Box-Win Labeled-Box-Top-Agg Labeled-Box-Obj)))
 
 (create-instance 'LABELED-BOX opal:aggregadget
    :declare ((:parameters :left :top :min-frame-width :label-offset
@@ -85,7 +85,7 @@
    (:value "Field")
    (:selection-function NIL)
    (:field-font opal:default-font)
-   (:label-font (opal:get-standard-font NIL :bold NIL))
+   (:label-font (formula (opal:get-standard-font NIL :bold NIL)))
    ; Generally non-customizable slots
    (:field-height (o-formula (opal:string-height (gvl :field-font) "X")))
    (:label-height (o-formula (opal:string-height (gvl :label-font) "X")))

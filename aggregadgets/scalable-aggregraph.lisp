@@ -33,9 +33,11 @@ Change log:
 
 (in-package "OPAL")
 
+#|
 (eval-when (eval load compile)
   (export '(SCALABLE-AGGREGRAPH SCALABLE-AGGREGRAPH-NODE-PROTOTYPE
 	    SCALABLE-AGGREGRAPH-LINK-PROTOTYPE)))
+|#
 
 ;; requires the file "rectangle-conflict-object.lisp" to be loaded.
 

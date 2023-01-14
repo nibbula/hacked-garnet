@@ -44,14 +44,13 @@ Change log:
 
 (in-package "GARNET-GADGETS")
 
-(eval-when (eval load compile)
-  (export '(Scrolling-Window Auto-Scroll
-	    Scroll-Win-Inc Scroll-Win-To
-	    Scrolling-Window-Go Scrolling-Window-Stop
-	    Show-Box Show-Cursor))
-
-  (proclaim '(special SCROLLING-WINDOW SCROLLING-WINDOW-WITH-BARS
-		      MOTIF-SCROLLING-WINDOW-WITH-BARS)))
+;; (eval-when (eval load compile)
+;;   (export '(Scrolling-Window Auto-Scroll
+;; 	    Scroll-Win-Inc Scroll-Win-To
+;; 	    Scrolling-Window-Go Scrolling-Window-Stop
+;; 	    Show-Box Show-Cursor))
+(proclaim '(special SCROLLING-WINDOW SCROLLING-WINDOW-WITH-BARS
+		    MOTIF-SCROLLING-WINDOW-WITH-BARS))
 
 (defmacro auto-scroll (obj)
   `(kr-send ,obj :auto-scroll ,obj))

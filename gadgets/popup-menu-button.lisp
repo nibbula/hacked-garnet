@@ -67,11 +67,10 @@
 
 (in-package "GARNET-GADGETS")
 
-(eval-when (eval load compile)
-  (export '(Popup-Menu-Button lines-bitmap downarrow-bitmap))
-
-  #+garnet-debug
-  (export '(Popup-Menu-Button-Go Popup-Menu-Button-Stop)))
+;; (eval-when (eval load compile)
+;;   (export '(Popup-Menu-Button lines-bitmap downarrow-bitmap))
+;;   #+garnet-debug
+;;   (export '(Popup-Menu-Button-Go Popup-Menu-Button-Stop)))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -179,11 +178,13 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (create-instance 'lines-bitmap opal:bitmap
-    (:image (opal:read-image (user::garnet-pathnames "pop-up-icon-no-border.bm"
-					     user::Garnet-Bitmap-Pathname))))
+  (:image (opal:read-image
+	   (garnet-user::garnet-pathnames "pop-up-icon-no-border.bm"
+					  garnet-user::Garnet-Bitmap-Pathname))))
 (create-instance 'downarrow-bitmap opal:bitmap
-    (:image (opal:read-image (user::garnet-pathnames "downarrow.bm"
-					     user::Garnet-Bitmap-Pathname))))
+  (:image (opal:read-image
+	   (garnet-user::garnet-pathnames "downarrow.bm"
+					  garnet-user::Garnet-Bitmap-Pathname))))
 
 (create-instance 'Popup-Menu-Button gg:text-button
   :declare ((:parameters :left :top :string :items :v-spacing :h-align
@@ -357,13 +358,14 @@
   (opal::Gadget-Add-Item gadget item
 			 '(:menu :menu-item-list) args))
 
-(define-method :remove-local-item POPUP-MENU-BUTTON
-               (gadget &optional item &key (key #'opal:no-func))
-  (opal::Gadget-Remove-Local-Item gadget item
-				  '(:menu :menu-item-list) key))
-(define-method :remove-item POPUP-MENU-BUTTON
-               (gadget &optional item &key (key #'opal:no-func))
-  (opal::Gadget-Remove-Item gadget item '(:menu :menu-item-list) key))
+(gu:with-muffled-style-warnings
+  (define-method :remove-local-item POPUP-MENU-BUTTON
+                 (gadget &optional item &key (key #'opal:no-func))
+    (opal::Gadget-Remove-Local-Item gadget item
+  				    '(:menu :menu-item-list) key))
+  (define-method :remove-item POPUP-MENU-BUTTON
+                 (gadget &optional item &key (key #'opal:no-func))
+    (opal::Gadget-Remove-Item gadget item '(:menu :menu-item-list) key)))
 
 (s-value POPUP-MENU-BUTTON :change-item
 	 (g-value opal:aggrelist :change-item))

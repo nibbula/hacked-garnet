@@ -208,6 +208,7 @@
 ;; This exists expressly to convert paths using CMU's
 ;; ext:search-list keys into normal paths.  Not robust, but better than
 ;; what used to be done...
+#|
 (defun fix-font-path (path-argument)
   (when path-argument
     (let* ((path path-argument)
@@ -221,6 +222,13 @@
 	  (if (eq (position #\/ path :from-end t) (1- (length path)))
 	      path
 	      (concatenate 'string path "/"))))))
+|#
+;;; @@@ This doesn't do a search path anymore
+(defun fix-font-path (path)
+  (when path
+    (if (eq (position #\/ path :from-end t) (1- (length path)))
+	path
+	(concatenate 'string path "/"))))
 
 ;; Hack used in font-to-xfont to counteract ridiculous tendency
 ;; of CLX to tack on #\null characters at the end of font paths.

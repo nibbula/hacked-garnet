@@ -156,7 +156,7 @@
 
 (let ((update-vals (s-value opal::FAST-REDRAW-RECTANGLE :update-slots-values
 			(make-array 9 :initial-element nil))))
-   (setf (aref update-vals *rect-draw-function*) :copy)
+   (setf (aref update-vals +rect-draw-function+) :copy)
    (setf (aref update-vals 0) T)
    (setf (aref update-vals 1) :rectangle))
 

@@ -9,6 +9,10 @@
 ;;; please contact garnet@cs.cmu.edu to be put on the mailing list. ;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;; general.lisp
+;;
+;; by David S. Kosbie
+
 #|
 ============================================================
 Change log:
@@ -26,40 +30,34 @@ Change log:
 ============================================================
 |#
 
-(in-package "GARNET-UTILS")
-
-(eval-when (eval load compile)
-  (export '(WHILE
-	    UNTIL
-	    DO2LISTS
-	    DOLIST2
-	    M
-	    M1
-	    STRING+
-	    ADD-TO-LIST
-	    VERIFY-BINDING
-	    SAFE-FUNCTIONP
-	    PROBE-DIRECTORY
-
-            PI/2  PI3/2  2PI -2PI SHORT-PI
-	    )))
-
-;; general.lisp
-;;
-;; by David S. Kosbie
-
-#|
-
-This file defines a host of Lisp utilities used by other Garnet code.
-
-|#
+(defpackage :garnet-utils
+  (:documentation
+   "This file defines a host of Lisp utilities used by other Garnet code.")
+  (:use :common-lisp)
+  (:nicknames :gu)
+  (:export
+   #:while
+   #:until
+   #:do2lists
+   #:dolist2
+   #:m
+   #:m1
+   #:string+
+   #:add-to-list
+   #:verify-binding
+   #:safe-functionp
+   #:probe-directory
+   #:pi/2 #:pi3/2 #:2pi #:-2pi #:short-pi
+   #:define-constant
+   #:with-muffled-style-warnings
+   ))
+(in-package :garnet-utils)
 
 (defconstant pi/2 (/ pi 2))
 (defconstant pi3/2 (* 3 (/ pi 2)))
 (defconstant 2PI (* 2 PI))
 (defconstant -2PI (- (* 2 PI)))
 (defconstant short-PI (coerce PI 'short-float))
-
 
 (defmacro while (test &rest body)
   `(loop
@@ -223,3 +221,26 @@ This file defines a host of Lisp utilities used by other Garnet code.
 	    (and (truename filename) t))
   #-clisp (probe-file filename)
   )
+
+(defun same-with-warning (name new test)
+  "If ‘name’ is bound, return it's value, but but warn if ‘new’ is different
+from it according to ‘test’. Return ‘new’ if name isn't bound."
+  (if (boundp name)
+      (let ((old (symbol-value name)))
+	(unless (funcall test old new)
+	  (warn "Not redefining ~s from ~s to ~s." name old new))
+	old)
+      new))
+
+(defmacro define-constant (name value &optional doc (test ''equal))
+  "Like ‘defconstant’ but don't actually redefine the constant. If the ‘value’
+is equal according to ‘test’, which defaults to ‘equal’, then don't even
+complain. Otherwise just warn, and don't redefine it."
+  `(cl:defconstant ,name (same-with-warning ',name ,value ,test)
+     ,@(when doc (list doc))))
+
+(defmacro with-muffled-style-warnings (&body body)
+  "Muffle ‘style-warnings’ on some implementations."
+  `(locally
+       #+sbcl (declare (sb-ext:muffle-conditions style-warning))
+       ,@body))

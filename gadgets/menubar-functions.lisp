@@ -31,13 +31,13 @@
 
 (in-package "GARNET-GADGETS")
 
-(eval-when (eval load compile)
-  (export '(Add-Submenu-Item Remove-Submenu-Item
-	    Menubar-Components Submenu-Components Get-Submenu-Component
-	    Find-Submenu-Component Get-Bar-Component Set-Menubar Set-Submenu
-	    Menubar-Enable-Component Menubar-Disable-Component
-	    Menubar-Enabled-P Menubar-Installed-P
-	    Menubar-Get-Title Menubar-Set-Title)))
+;; (eval-when (eval load compile)
+;;   (export '(Add-Submenu-Item Remove-Submenu-Item
+;; 	    Menubar-Components Submenu-Components Get-Submenu-Component
+;; 	    Find-Submenu-Component Get-Bar-Component Set-Menubar Set-Submenu
+;; 	    Menubar-Enable-Component Menubar-Disable-Component
+;; 	    Menubar-Enabled-P Menubar-Installed-P
+;; 	    Menubar-Get-Title Menubar-Set-Title)))
 	  
 ;;; This is the DESTROYER (*gasp*) of the menubars
 

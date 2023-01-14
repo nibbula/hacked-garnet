@@ -52,7 +52,7 @@
 ;;; don't need to do this after running this macro.
 ;;;
 (defun update-slots-values-changed (object first-changed obj-update-info)
-  (declare (optimize (speed 3) (safety 0)))
+  ;; (declare (optimize (speed 3) (safety 0)))
   (let* ((update-slots-values (g-local-value object :update-slots-values))
 	 ;; dzg - changed from GET-LOCAL-VALUE to GET-VALUE
 	 (start-slot-list (get-value object :update-slots))
@@ -83,7 +83,7 @@
 ;;; changed when it is invalidated.
 ;;; If there is no update-slots-values entry, it just returns 0.
 (defun simple-update-slots-values-changed (object)
- (declare (optimize (speed 3) (safety 0)))
+  ;; (declare (optimize (speed 3) (safety 0)))
  (let ((update-slots-values (g-local-value object :update-slots-values)))
   (if update-slots-values
 	;; ecp - changed from GET-LOCAL-VALUE to GET-VALUE
@@ -105,7 +105,7 @@
 					   line-style-gc filling-style-gc
 					   bbox-1 bbox-2
 					   &optional (total-p NIL))
-  (declare (optimize (speed 3) (safety 0)))
+  ;; (declare (optimize (speed 3) (safety 0)))
   (let ((dirty-p (update-info-dirty-p update-info))
 	(agg-bbox (update-info-old-bbox update-info)))
     (when
@@ -143,7 +143,7 @@
 (define-method :update opal:graphical-object (gob update-info
 						  bbox-1 bbox-2
 						  &optional (total-p NIL))
-  (declare (optimize (speed 3) (safety 0)))
+  ;; (declare (optimize (speed 3) (safety 0)))
   (let ((old-bbox (update-info-old-bbox update-info))
 	(a-window (g-value gob :window)))
     ;; Fix for changes from 2.2 to 3.0. ---fmg

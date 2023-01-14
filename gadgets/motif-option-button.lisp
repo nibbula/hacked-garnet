@@ -35,9 +35,9 @@
 (in-package "GARNET-GADGETS")
 (defparameter demo-motif-ob NIL)
 
-#+garnet-debug
-(eval-when (eval load compile)
-  (export '(motif-option-button motif-option-button-go motif-option-button-stop)))
+;; #+garnet-debug
+;; (eval-when (eval load compile)
+;;   (export '(motif-option-button motif-option-button-go motif-option-button-stop)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; First functions display the submenu from gilt, etc.
@@ -500,15 +500,16 @@
 (define-method :add-item MOTIF-OPTION-BUTTON (gadget item &rest args)
   (opal::Gadget-Add-Item gadget item 
 			 '(:option-button-menu :menu-item-list) args))
-   
-(define-method :remove-local-item MOTIF-OPTION-BUTTON
-               (gadget &optional item &key (key #'opal:no-func))
-  (opal::Gadget-Remove-Local-Item gadget item 
-				  '(:option-button-menu :menu-item-list) key))
-(define-method :remove-item MOTIF-OPTION-BUTTON
-               (gadget &optional item &key (key #'opal:no-func))
-  (opal::Gadget-Remove-Item gadget item 
-			    '(:option-button-menu :menu-item-list) key))
+
+(gu:with-muffled-style-warnings
+  (define-method :remove-local-item MOTIF-OPTION-BUTTON
+                 (gadget &optional item &key (key #'opal:no-func))
+    (opal::Gadget-Remove-Local-Item gadget item 
+				    '(:option-button-menu :menu-item-list) key))
+  (define-method :remove-item MOTIF-OPTION-BUTTON
+                 (gadget &optional item &key (key #'opal:no-func))
+    (opal::Gadget-Remove-Item gadget item 
+			      '(:option-button-menu :menu-item-list) key)))
 
 (s-value MOTIF-OPTION-BUTTON :change-item
 	 (g-value opal:aggrelist :change-item))

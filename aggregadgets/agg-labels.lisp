@@ -22,8 +22,8 @@ Change log:
 
 (in-package "OPAL")
 
-(eval-when (eval load compile)
-  (export '(Single-Button-Get-Label Panel-Get-Label)))
+;; (eval-when (eval load compile)
+;;   (export '(Single-Button-Get-Label Panel-Get-Label)))
 
 ;;
 ;; These functions return objects that will be used directly

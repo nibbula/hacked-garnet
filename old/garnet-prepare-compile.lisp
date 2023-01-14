@@ -166,4 +166,4 @@ Change log:
 
 (defvar *Garnet-Going-To-Compile* T)
 
-(format T "** Now load garnet-loader, and then load garnet-compiler~%")
+;; (format T "** Now load garnet-loader, and then load garnet-compiler~%")

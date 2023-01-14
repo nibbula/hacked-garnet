@@ -19,53 +19,28 @@
 ;;; reuse discarded slot structures in set-slot-accessor
 ;;; reuse discarded slot structures in clear-schema-slots
 
-
-(in-package "KR")
-
-(eval-when (eval load compile)
-  (export '(SCHEMA
-	    CREATE-INSTANCE CREATE-PROTOTYPE CREATE-RELATION CREATE-SCHEMA
-	    FORMULA O-FORMULA
-	    SCHEMA-P RELATION-P IS-A-P HAS-SLOT-P FORMULA-P
-	    S-VALUE G-VALUE G-CACHED-VALUE G-LOCAL-VALUE GV GVL GV-LOCAL
-	    GET-VALUE GET-LOCAL-VALUE
-	    DOVALUES DOSLOTS
-	    DEFINE-METHOD KR-SEND CALL-PROTOTYPE-METHOD APPLY-PROTOTYPE-METHOD
-	    METHOD-TRACE
-	    WITH-CONSTANTS-DISABLED WITH-TYPES-DISABLED
-	    WITH-DEMONS-DISABLED WITH-DEMON-DISABLED WITH-DEMON-ENABLED
-	    CHANGE-FORMULA MOVE-FORMULA RECOMPUTE-FORMULA COPY-FORMULA KR-PATH
-	    MARK-AS-CHANGED MARK-AS-INVALID
-	    PS CALL-ON-PS-SLOTS NAME-FOR-SCHEMA
-	    DECLARE-CONSTANT SLOT-CONSTANT-P
-	    DESTROY-SLOT DESTROY-SCHEMA DESTROY-CONSTRAINT
-	    DEF-KR-TYPE G-TYPE S-TYPE CHECK-SLOT-TYPE KR-BOOLEAN
-	    GET-TYPE-DOCUMENTATION SET-TYPE-DOCUMENTATION GET-TYPE-DEFINITION
-	    GET-DECLARATIONS GET-SLOT-DECLARATIONS
-	    G-FORMULA-VALUE S-FORMULA-VALUE
-	    ;;; This should be exported but is not - LispWorks bug:
-	    ;;; SELF-OLD-VALUE
-	    )))
-
+(in-package :kr)
 
 (defparameter *kr-version* "2.3.4")
 
-
-
-(eval-when (eval compile load)
+(eval-when (:compile-toplevel :load-toplevel :execute)
   (defvar *special-kr-optimization*
-    '(optimize (speed 3) (space 0) #+(or ALLEGRO APPLE) (debug 0)))
+    ;; '(optimize (speed 3) (space 0) #+(or ALLEGRO APPLE) (debug 0))
+    ;; '(optimize (speed 0) (space 0) (debug 3))
+    '(optimize (debug 3))
+    )
 
-  (proclaim '(special user::*default-garnet-proclaim*))
-  (if (boundp 'user::*default-garnet-proclaim*)
-    (if user::*default-garnet-proclaim*
-      (proclaim user::*default-garnet-proclaim*))
-    (proclaim '(optimize (safety 1) (space 0)
-		(speed #-LUCID 3 #+LUCID 2) #+(or APPLE ALLEGRO) (debug 3))
-	      #+COMMENT
-	      '(optimize (safety 0) (space 0)
-		(speed #-LUCID 3 #+LUCID 2) #+(or APPLE ALLEGRO) (debug 0)))))
-
+  ;; (proclaim '(special user::*default-garnet-proclaim*))
+  ;; (if (boundp 'user::*default-garnet-proclaim*)
+  ;;   (if user::*default-garnet-proclaim*
+  ;;     (proclaim user::*default-garnet-proclaim*))
+  ;;   (proclaim
+  ;;    '(optimize (safety 1) (space 0)
+  ;;      (speed #-LUCID 3 #+LUCID 2) #+(or APPLE ALLEGRO) (debug 3))
+  ;;    #+COMMENT
+  ;;    '(optimize (safety 0) (space 0)
+  ;;      (speed #-LUCID 3 #+LUCID 2) #+(or APPLE ALLEGRO) (debug 0))))
+  )
 
 ;;; This enables the eager-evaluation version.
 ;;; 
@@ -158,7 +133,7 @@
 ;;; -------------------------------------------------- Variables, etc.
 
 
-(eval-when (compile load eval)
+(eval-when (:compile-toplevel :load-toplevel :execute)
   (defmacro defparam (&rest body)
     #+(or GARNET-DEBUG (not CLISP)) `(defparameter ,@body)
     ;; Get more speed out of clisp by using constants
@@ -166,11 +141,10 @@
     ))
 
 #+GARNET-BINS
-(eval-when (compile load eval)
+(eval-when (:compile-toplevel :load-toplevel :execute)
   (defparameter *bins-length* 8))
 
-
-(eval-when (compile load eval)
+(eval-when (:compile-toplevel :load-toplevel :execute)
   (defvar *store-lambdas* T
     "If NIL, lambda expressions are not stored in formulas"))
 
@@ -178,8 +152,8 @@
 (defvar *types-enabled* T
   "Set to T to enable type checking on s-value and formula reevaluation")
 
-
-(defvar *warning-on-create-schema* T
+;; was T, but it's like everytime you compile
+(defvar *warning-on-create-schema* nil
   "If nil, no warning is printed when create-schema is redefining an existing
   schema.")
 
@@ -199,12 +173,13 @@
   "If nil, no warning is printed when propagate-change sees a disconnected
   formula.")
 
+;; Don'tcha think this is too noisy to be on by default?
+(eval-when (:compile-toplevel :load-toplevel :execute)
+  ;; (defvar *print-new-instances* T))
+  (defvar *print-new-instances* NIL))
 
-(eval-when (compile load eval)
-  (defvar *print-new-instances* T))
 
-
-(eval-when (compile load eval)
+(eval-when (:compile-toplevel :load-toplevel :execute)
   (defmacro a-local-only-slot (slot)
     `(eq ,slot :is-a-inv)))
 
@@ -304,7 +279,7 @@
   are created with (create-schema NIL).")
 
 
-(eval-when (eval compile load)
+(eval-when (:compile-toplevel :load-toplevel :execute)
   (defparam *type-bits* 10)  ;; # of bits for encoding type
 
   (defparam *type-mask* (1- (expt 2 *type-bits*))) ;; to extract type
@@ -319,7 +294,7 @@
   (defparam *is-parameter-slot-bit*  (1+ *is-local-only-slot-bit*)))
 
 
-(eval-when (eval compile load)
+(eval-when (:compile-toplevel :load-toplevel :execute)
   (defparam *local-mask* 0)
   (defparam *constant-mask* (ash 1 *is-constant-bit*))
   (defparam *is-update-slot-mask* (ash 1 *is-update-slot-bit*))
@@ -393,7 +368,7 @@
 ;;; -------------------- Definitions of value-information bits.
 
 #+EAGER
-(eval-when (eval compile load)
+(eval-when (:compile-toplevel :load-toplevel :execute)
   ;; bit is 1 if formula is part of a cycle, 0 otherwise
   (defparam *cycle-bit* 0)
   ;; bit is 1 if formula is on the evaluation queue, 0 otherwise
@@ -425,7 +400,7 @@
 
 
 #+EAGER
-(eval-when (eval compile load)
+(eval-when (:compile-toplevel :load-toplevel :execute)
   (defparam *cycle-mask* (ash 1 *cycle-bit*))
   (defparam *eval-mask* (ash 1 *eval-bit*))
   (defparam *visited-mask* (ash 1 *visited-bit*))
@@ -1077,7 +1052,8 @@ You can also provide a documentation string as the last parameter, as in:
 ;;;; GET-LOCAL-VALUE
 ;;; 
 (defun get-local-value (schema slot)
-  (locally (declare (optimize (speed 3) (space 0) #+(or ALLEGRO APPLE) (debug 0)))
+  (locally
+      #+(or) (declare (optimize (speed 3) (space 0) #+(or ALLEGRO APPLE) (debug 0)))
     (let ((entry (slot-accessor schema slot)))
     (if (if entry (not (is-inherited (sl-bits entry))))
       (sl-value entry)))))
@@ -1351,7 +1327,7 @@ You can also provide a documentation string as the last parameter, as in:
 ;;; Helper function for multi-level S-VALUE
 ;;;
 (defun s-value-chain (schema &rest slots)
-  (locally (declare (optimize (speed 3) (space 0) #+(or ALLEGRO APPLE) (debug 0)))
+  (locally (declare #+(or) (optimize (speed 3) (space 0) #+(or ALLEGRO APPLE) (debug 0)))
   (if (null schema)
     (error "S-VALUE on a null object:  (S-VALUE ~S~{ ~S~})" schema slots)
     (unless (schema-p schema)
@@ -1470,7 +1446,7 @@ at slot ~S  (non-schema value is ~S, last schema was ~S)"
 ;;;; HAS-SLOT-P
 ;;; 
 (defun has-slot-p (schema slot)
-  (locally (declare (optimize (speed 3) (space 0) #+(or ALLEGRO APPLE) (debug 0)))
+  (locally #+(or) (declare (optimize (speed 3) (space 0) #+(or ALLEGRO APPLE) (debug 0)))
     (let ((entry (slot-accessor schema slot)))
     (if entry
       (if (not (eq (sl-value entry) *no-value*))

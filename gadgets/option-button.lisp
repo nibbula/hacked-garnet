@@ -37,9 +37,9 @@
 (defparameter motif-ob NIL)
 (defparameter demo-ob NIL)
 
-#+garnet-debug
-(eval-when (eval load compile)
-  (export '(Option-Button Option-Button-Go Option-Button-Stop)))
+;; #+garnet-debug
+;; (eval-when (eval load compile)
+;;   (export '(Option-Button Option-Button-Go Option-Button-Stop)))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -266,7 +266,7 @@
 				(first (first (gvl :items)))
 				(first (gvl :items)))))
   (:button-font opal:default-font)
-  (:label-font (opal:get-standard-font NIL :bold NIL))
+  (:label-font (formula (opal:get-standard-font NIL :bold NIL)))
   (:selection-function NIL)
   (:value (o-formula (gvl :option-text-button :string)))
   (:button-fixed-width-p T)
@@ -485,15 +485,15 @@
 (define-method :add-item OPTION-BUTTON (gadget item &rest args)
   (opal::Gadget-Add-Item gadget item 
 			 '(:option-button-menu :menu-item-list) args))
-   
-(define-method :remove-local-item OPTION-BUTTON
-               (gadget &optional item &key (key #'opal:no-func))
-  (opal::Gadget-Remove-Local-Item gadget item 
-				  '(:option-button-menu :menu-item-list) key))
-(define-method :remove-item OPTION-BUTTON
-               (gadget &optional item &key (key #'opal:no-func))
-  (opal::Gadget-Remove-Item gadget item 
-			    '(:option-button-menu :menu-item-list) key))
+(gu:with-muffled-style-warnings   
+  (define-method :remove-local-item OPTION-BUTTON
+                 (gadget &optional item &key (key #'opal:no-func))
+    (opal::Gadget-Remove-Local-Item gadget item 
+  				    '(:option-button-menu :menu-item-list) key))
+  (define-method :remove-item OPTION-BUTTON
+                 (gadget &optional item &key (key #'opal:no-func))
+    (opal::Gadget-Remove-Item gadget item 
+  			      '(:option-button-menu :menu-item-list) key)))
 
 (s-value OPTION-BUTTON :change-item
 	 (g-value opal:aggrelist :change-item))
@@ -537,7 +537,7 @@
 	 (:items '("Red" "Blue" "Green" "Yellow" "Aquamarine" "Cyan" "Fluorescent"))
 	 (:initial-item "Cyan")
 	 (:label "Color:")
-	 (:button-font (opal:get-standard-font NIL :bold-italic NIL))
+	 (:button-font (formula (opal:get-standard-font NIL :bold-italic NIL)))
 	 (:button-shadow-offset 2)
 	 (:selection-function #'(lambda (g v)
 				  (declare (ignore g))

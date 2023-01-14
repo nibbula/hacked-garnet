@@ -51,18 +51,21 @@
 
 (in-package "GARNET-GADGETS")
 
-(eval-when (eval load compile)
-  (export '(MOTIF-TAB-PRIORITY-LEVEL MOTIF-TAB-INTER MOTIF-MENU-INTER
-	    MOTIF-BACKGROUND MOTIF-RECT))
-  (proclaim '(special MOTIF-TAB-PRIORITY-LEVEL MOTIF-SCROLLING-LABELED-BOX)))
+;; (eval-when (eval load compile)
+;;   (export '(MOTIF-TAB-PRIORITY-LEVEL MOTIF-TAB-INTER MOTIF-MENU-INTER
+;; 	    MOTIF-BACKGROUND MOTIF-RECT))
+(proclaim '(special MOTIF-TAB-PRIORITY-LEVEL MOTIF-SCROLLING-LABELED-BOX))
 
 
+#| How about no.
 (defvar MOTIF-GADGETS-INIT
   (dolist (pair '((:GAD-scroll-parts "GAD-scroll-parts")))
     (unless (get :garnet-modules (car pair))
-      (load (user::garnet-pathnames (cadr pair)
+      (load (garnet-user::garnet-pathnames (cadr pair)
 			     #+cmu "gadgets:"
-			     #+(not cmu) user::Garnet-Gadgets-PathName)))))
+			     #+(not cmu)
+			     garnet-user::Garnet-Gadgets-PathName)))))
+|#
 
 
 ;;;  Values for changing the brightness of the foreground-color
@@ -588,7 +591,8 @@
 ;;
 (defun ADD-MOTIF-TAB-PRIORITY-LEVEL ()
   (unless (and (boundp 'MOTIF-TAB-PRIORITY-LEVEL)
-	       (member MOTIF-TAB-PRIORITY-LEVEL inter:priority-level-list))
+	       (member (symbol-value 'MOTIF-TAB-PRIORITY-LEVEL)
+		       inter:priority-level-list))
     (push (create-instance 'MOTIF-TAB-PRIORITY-LEVEL inter:priority-level
 	    (:stop-when NIL))
 	  inter:priority-level-list)))
@@ -672,7 +676,8 @@
 		(s-value prev-object :keyboard-selection-p new-p)
 		; Check if it is a MOTIF-SCROLLING-LABELED-BOX
 		(when (and (boundp 'MOTIF-SCROLLING-LABELED-BOX)
-			   (is-a-p prev-object MOTIF-SCROLLING-LABELED-BOX))
+			   (is-a-p prev-object
+				   (symbol-value 'MOTIF-SCROLLING-LABELED-BOX)))
 		  (let ((prev-object-inter (g-value prev-object :field-text
 						    :text-edit)))
 		    (if new-p
@@ -688,7 +693,8 @@
 
 	        ;; Now take care of MOTIF-SCROLLING-LABELED-BOX objects
 		(when (boundp 'MOTIF-SCROLLING-LABELED-BOX)
-		  (if (is-a-p prev-object MOTIF-SCROLLING-LABELED-BOX)
+		  (if (is-a-p prev-object
+			      (symbol-value 'MOTIF-SCROLLING-LABELED-BOX))
 		      (inter:stop-interactor (g-value prev-object
 						      :field-text :text-edit)))
 		  (if (is-a-p new-object MOTIF-SCROLLING-LABELED-BOX)

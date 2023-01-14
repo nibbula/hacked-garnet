@@ -186,9 +186,11 @@ aggrelist.
 
 (in-package "OPAL")
 
+#|
 (eval-when (eval load compile)
   (export '(write-gadget e-formula *verbose-write-gadget*
 	    *required-names* *standard-names* *defined-names*)))
+|#
 
 (defmacro Write-Slots (agget normal-proto components behaviors
 			     suppress-children?)
@@ -212,6 +214,10 @@ aggrelist.
 ;;;   schema that have standard definitions in Garnet.
 ;;;
 (defparameter *standard-names* 
+  nil
+  ;; We have to delay this until all packages are defined.
+  ;; See ../standard-names.lisp
+#|
   '(opal:graphic-quality opal:filling-style opal:default-filling-style 
     opal:purple-fill opal:cyan-fill opal:orange-fill opal:yellow-fill
     opal:blue-fill opal:green-fill opal:red-fill
@@ -288,6 +294,7 @@ aggrelist.
     GILT::type-motif-background
     
     )
+  |#
   "what name to output for standard schema")
 
 ;;; :output-descriptor slot tells what the prototype should be for a
@@ -807,7 +814,7 @@ aggrelist.
        (tab)
        (format t "~S" (g-value obj :known-as)))
       (:name
-       (format *error-output* "output-finish not expecting :name state~%"
+       (format *error-output* "output-finish not expecting :name state ~a~%"
 	       state))
       (:class
        (write-char '#\) )

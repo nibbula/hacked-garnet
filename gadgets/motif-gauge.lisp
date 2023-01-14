@@ -62,11 +62,11 @@
 
 (in-package "GARNET-GADGETS")
 
-(eval-when (eval load compile)
-  (export '(Motif-Gauge))
-  #+garnet-debug
-  (export '(Motif-Gauge-Go Motif-Gauge-Stop
-	    Motif-Gauge-Win Motif-Gauge-Top-Agg Demo-Motif-Gauge)))
+;; (eval-when (eval load compile)
+;;   (export '(Motif-Gauge))
+;;   #+garnet-debug
+;;   (export '(Motif-Gauge-Go Motif-Gauge-Stop
+;; 	    Motif-Gauge-Win Motif-Gauge-Top-Agg Demo-Motif-Gauge)))
 
 (defmacro sqr (x)
   (cond ((symbolp x) `(* ,x ,x))

@@ -24,6 +24,7 @@ Change log:
 
 (in-package "OPAL")
 
+#|
 (eval-when (eval load compile)
   (export '(add-local-component add-local-interactor remove-local-component
 	    remove-local-interactor add-local-item
@@ -31,6 +32,7 @@ Change log:
 	    notice-items-changed add-interactor remove-interactor
 	    take-default-component replace-item-prototype-object
 	    )))
+|#
 
 ;;;--------------------------------------------------------------------------
 ;;;

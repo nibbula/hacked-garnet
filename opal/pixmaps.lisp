@@ -42,9 +42,9 @@
 
 (in-package "OPAL")
 
-(eval-when (eval load compile)
-  (export '(pixmap write-xpm-file read-xpm-file
-	    create-pixmap-image window-to-pixmap-image)))
+;; (eval-when (eval load compile)
+;;   (export '(pixmap write-xpm-file read-xpm-file
+;; 	    create-pixmap-image window-to-pixmap-image)))
 
 ;    This function was originally written to handle two types of pixmaps --
 ; those of the meltsner-format (XPM2) and those not of the meltsner-format
@@ -310,8 +310,9 @@
 ;;;
 ;;; The following info is obtained from scan.c in XPM-3.4k library.
 ;;;
-(defconstant +printable+
-#+nil   " .XoO+@#$%&*=-;:>,<1234567890qwertyuipasdfghjklzxcvbnmMNBVCZASDFGHJKLPIUYTREWQ!~^/()_`'][{}|"
+(gu:define-constant +printable+
+#+nil
+  " .XoO+@#$%&*=-;:>,<1234567890qwertyuipasdfghjklzxcvbnmMNBVCZASDFGHJKLPIUYTREWQ!~^/()_`'][{}|"
   ".XoO+@#$%&*=-;:>,<1234567890qwertyuipasdfghjklzxcvbnmMNBVCZASDFGHJKLPIUYTREWQ!~^/()_`'][{}|"
   "Sequence of printable characters; taken from scan.c in XPM-3.4k library.")
 
@@ -415,18 +416,18 @@
 
 (define-method :draw opal:pixmap (gob a-window)
   (let* ((update-vals (get-local-value gob :update-slots-values))
-	 (function (aref update-vals *bm-draw-function*))
-	 (image (aref update-vals *bm-image*))
-	 (line-style (aref update-vals *bm-lstyle*))
-	 (left (aref update-vals *bm-left*))
-	 (top (aref update-vals *bm-top*)))
+	 (function (aref update-vals +bm-draw-function+))
+	 (image (aref update-vals +bm-image+))
+	 (line-style (aref update-vals +bm-lstyle+))
+	 (left (aref update-vals +bm-left+))
+	 (top (aref update-vals +bm-top+)))
     (multiple-value-bind (width height depth)
 	(gem:image-size a-window image)
       (if (and image line-style)
 	(if (or (= depth 1)
 		(g-value opal:color :color-p))
 	  (gem:draw-image a-window left top width height image function
-			  (aref update-vals *bm-fstyle*))
+			  (aref update-vals +bm-fstyle+))
 	  (gem:draw-rectangle a-window left top width height
 			      function line-style nil))))))
 

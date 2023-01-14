@@ -33,7 +33,8 @@ Change log:
 ============================================================
 |#
 
-(in-package "INTERACTORS")
+;; (in-package "INTERACTORS")
+(in-package :gesture)
 
 
 ;; structure definitions

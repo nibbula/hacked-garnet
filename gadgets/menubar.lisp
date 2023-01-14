@@ -101,15 +101,13 @@
 
 (in-package "GARNET-GADGETS")
 
-(eval-when (eval load compile)
-  (export '(MENUBAR BAR-ITEM SUBMENU SUBMENU-ITEM MAKE-SUBMENU-WIN
-			     
-	    ; Creation Functions
-	    Make-Menubar Make-Bar-Item Make-Submenu-Item))
-
-  ; Demo things
-  #+garnet-debug
-  (export '(MENUBAR-GO MENUBAR-STOP DEMO-MENUBAR MENUBAR-WIN MENUBAR-TOP-AGG)))
+;; (eval-when (eval load compile)
+;;   (export '(MENUBAR BAR-ITEM SUBMENU SUBMENU-ITEM MAKE-SUBMENU-WIN
+;; 	    ; Creation Functions
+;; 	    Make-Menubar Make-Bar-Item Make-Submenu-Item))
+;;   ; Demo things
+;;   #+garnet-debug
+;;   (export '(MENUBAR-GO MENUBAR-STOP DEMO-MENUBAR MENUBAR-WIN MENUBAR-TOP-AGG)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; First function is to display the submenu from gilt, etc.
@@ -917,6 +915,7 @@
 ; 1) An instance of SUBMENU-ITEM, or
 ; 2) A string or atom
 ;
+(gu:with-muffled-style-warnings
 (define-method :remove-item BAR-ITEM (a-bar-item &optional item
 						 &key (key #'opal:no-func))
   (let* ((a-submenu-item (if (is-a-p item SUBMENU-ITEM)
@@ -957,7 +956,7 @@
 		   (substitute new-desc old-desc (g-value a-menubar :items)
 			       :test #'equal))
 	  (s-value a-bar-item :desc new-desc))
-      (s-value submenu :old-items new-sub-desc))))
+      (s-value submenu :old-items new-sub-desc)))))
 
 (s-value BAR-ITEM :change-item #'menubar-change-item)
 (s-value BAR-ITEM :remove-nth-item (g-value opal:aggrelist :remove-nth-item))

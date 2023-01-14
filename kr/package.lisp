@@ -5,7 +5,8 @@
 (defpackage :kr-debug
   (:documentation "KR debugging.")
   (:use :common-lisp)
-  (:export))
+  ;; (:export)
+  )
 
 (defpackage :kr
   (:documentation "Constraint-Based Knowledge Representation.")
@@ -34,7 +35,10 @@
    ;; This should be exported but is not - LispWorks bug:
    ;; self-old-value
 
-   ;; from opal/types.lisp
+   ;; kr-doc
+   #:get-slot-doc #:set-slot-doc
+   
+   ;; opal/types.lisp
    #:items-type #:accelerators-type #:known-as-type #:filename-type
    #:inter-window-type
    ))

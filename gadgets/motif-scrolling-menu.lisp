@@ -136,12 +136,12 @@
 
 (in-package "GARNET-GADGETS")
 
-(eval-when (eval load compile)
-  (export '(Motif-Scrolling-Menu))
-  #+garnet-debug
-  (export '(Motif-Scrolling-Menu-Go Motif-Scrolling-Menu-Stop
-	    Motif-Scrolling-Menu-Obj Motif-Scrolling-Menu-Win
-	    Motif-Scrolling-Menu-Top-Agg)))
+;; (eval-when (eval load compile)
+;;   (export '(Motif-Scrolling-Menu))
+;;   #+garnet-debug
+;;   (export '(Motif-Scrolling-Menu-Go Motif-Scrolling-Menu-Stop
+;; 	    Motif-Scrolling-Menu-Obj Motif-Scrolling-Menu-Win
+;; 	    Motif-Scrolling-Menu-Top-Agg)))
 
 (create-instance 'MOTIF-SCROLLING-MENU-FRAME motif-box
   (:constant '(:depressed-p))
@@ -616,12 +616,14 @@
       (s-value alist :items items))))
 
 (s-value MOTIF-SCROLLING-MENU :remove-item (g-value opal:aggrelist :remove-item))
-(define-method :remove-local-item MOTIF-SCROLLING-MENU
+
+(gu:with-muffled-style-warnings
+  (define-method :remove-local-item MOTIF-SCROLLING-MENU
     (alist &optional item &key (key #'opal:no-func))
-  (let* ((old-items (or (g-local-value alist :items)
-			(copy-list (g-value alist :items))))
-	 (items (opal::delete-elt item old-items key)))
-    (s-value alist :items items)))
+    (let* ((old-items (or (g-local-value alist :items)
+			  (copy-list (g-value alist :items))))
+	   (items (opal::delete-elt item old-items key)))
+      (s-value alist :items items))))
 
 
 

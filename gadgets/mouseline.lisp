@@ -54,8 +54,8 @@ Change log:
 
 (in-package "GARNET-GADGETS")
 
-(eval-when (eval load compile)
-  (export '(MouseLine MouseLinePopup)))
+;; (eval-when (eval load compile)
+;;   (export '(MouseLine MouseLinePopup)))
 
 (unless (boundp 'MouseLinePriorityLevel)
   (create-instance 'MouseLinePriorityLevel inter:priority-level
@@ -371,14 +371,14 @@ Change log:
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-#+garnet-debug
-(eval-when (eval load compile)
- (export '(Mouseline-Go Mouseline-Stop)))
+;; #+garnet-debug
+;; (eval-when (eval load compile)
+;;  (export '(Mouseline-Go Mouseline-Stop)))
 
 #+Garnet-debug
 (defun MouseLine-Go ()
     (unless (get :garnet-modules :text-buttons)
-      (user::garnet-load "gg:text-buttons-loader"))
+      (garnet-user::garnet-load "gg:text-buttons-loader"))
     (create-instance 'MouseLine-Win inter:interactor-window
       (:title "MouseLine Tester Window")
       (:aggregate (create-instance 'MouseLine-Agg opal:aggregate)))

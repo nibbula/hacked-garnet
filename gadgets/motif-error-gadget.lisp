@@ -73,8 +73,8 @@ Change log:
 
 (in-package "GARNET-GADGETS")
 
-(eval-when (eval load compile)
-  (export '(MOTIF-ERROR-GADGET MOTIF-QUERY-GADGET)))
+;; (eval-when (eval load compile)
+;;   (export '(MOTIF-ERROR-GADGET MOTIF-QUERY-GADGET)))
 
 ;; NOTE:  If :parent-window is specified, then the parent window must already
 ;; have been opal:update'd when the instance of ERROR-GADGET is created.
@@ -184,40 +184,52 @@ Change log:
 			     :foreground-color))
                (:foreground-color ,(o-formula (gvl :parent :foreground-color)))
                (:font ,(opal:get-standard-font :sans-serif :bold :medium))
+               ;; (:font ,(formula
+	       ;; 		(opal:get-standard-font :sans-serif :bold :medium)))
                (:direction :horizontal)
 	       (:final-feedback-p NIL)
 	       (:selection-function
 		,#'(lambda (button value) (E-Q-Gadget-Sel-Func button value)))
                (:items ,(o-formula (gvl :parent :button-names)))))))
 
+;; @@@ This is a terrible workaround to prevent a prompert-gadget in
+;; protected-eval/prompter.lisp from trying to talk to the X server while
+;;; compiling.
+(defun it-aint-time-yet-homie-p ()
+  (not (and (boundp 'gem::*root-window*)
+	    gem::*root-window*)))
 
 (define-method :initialize MOTIF-ERROR-GADGET (e-gadget)
   (call-prototype-method e-gadget) 
-  (let ((window
-	 (create-instance NIL inter:interactor-window
-	    (:parent (g-value e-gadget :parent-window))
-	    (:visible NIL)))
-	(aggregate (create-instance NIL opal:aggregate)))
-    (s-value window :aggregate aggregate)
-    (s-value window :error-gadget e-gadget)
-    (s-value window :background-color
-	     (o-formula (gvl :error-gadget :foreground-color)))
-    (opal:update window)
-    ;; The :window slot of e-gadget is automatically set by add-component
-;    (with-demon-enabled #'inter::inter-update-slot-invalidated
+  (block nil
+    (when (it-aint-time-yet-homie-p)
+      (return))
+    ;; (error "NOT TRYNA HEAR DAT")
+    (let ((window
+	    (create-instance NIL inter:interactor-window
+	      (:parent (g-value e-gadget :parent-window))
+	      (:visible NIL)))
+	  (aggregate (create-instance NIL opal:aggregate)))
+      (s-value window :aggregate aggregate)
+      (s-value window :error-gadget e-gadget)
+      (s-value window :background-color
+	       (o-formula (gvl :error-gadget :foreground-color)))
+      (opal:update window)
+      ;; The :window slot of e-gadget is automatically set by add-component
+      ;; (with-demon-enabled #'inter::inter-update-slot-invalidated
       (opal:add-component aggregate e-gadget)
-;      )
-    (s-value window :modal-p
-	     (o-formula (gvl :error-gadget :modal-p)))))
+      ;; )
+      (s-value window :modal-p
+	       (o-formula (gvl :error-gadget :modal-p))))))
 
 
 ;;; testing/demo function for error-gadgets and query gadgets
-#+garnet-debug
-(eval-when (eval load compile)
-  (export '(Motif-Error-Gadget-Go Motif-Error-Gadget-Stop MOTIF-EGADGET
-	    MOTIF-QGADGET))
-  (proclaim '(special MOTIF-EG-WIN MOTIF-EG-AGG MOTIF-EG-FEED
-		      MOTIF-EGADGET MOTIF-QGADGET)))
+;; #+garnet-debug
+;; (eval-when (eval load compile)
+;;   (export '(Motif-Error-Gadget-Go Motif-Error-Gadget-Stop MOTIF-EGADGET
+;; 	    MOTIF-QGADGET))
+;;   (proclaim '(special MOTIF-EG-WIN MOTIF-EG-AGG MOTIF-EG-FEED
+;; 		      MOTIF-EGADGET MOTIF-QGADGET)))
 
 #+garnet-debug
 (defun Motif-Error-Gadget-Go ()

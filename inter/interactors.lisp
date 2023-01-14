@@ -183,7 +183,8 @@ Change log:
 (in-package "INTERACTORS")
 
 ;; the exported functions
-(eval-when (eval load compile)
+#|
+(eval-when (:compile-toplevel :load-toplevel :execute)
   (export '(
 	    ;; for animation
 	    start-animator Stop-Animator abort-animator animator-interactor
@@ -222,6 +223,7 @@ Change log:
 	    interactor interactor-window button-interactor text-interactor
 	    two-point-interactor move-grow-interactor menu-interactor
 	    angle-interactor)))
+|#
 
 ;;;
 ;;;  Variables used for noticing changed slots
@@ -311,10 +313,12 @@ Change log:
 ;;;    :event -- show all events that come in
 ;;;    :next -- trace the next interactor to run
 (defmacro if-debug (inter &rest body)
+  #-garnet-debug
+  (declare (ignore inter body))
   #+garnet-debug
-    `(when (and *int-debug* (trace-test ,inter))
-    (let ((*print-pretty* NIL))
-      ,@body))
+  `(when (and *int-debug* (trace-test ,inter))
+     (let ((*print-pretty* NIL))
+       ,@body))
   )
   
 ;;returns T or NIL based on whether should trace or not.  Should be same
@@ -478,6 +482,13 @@ Change log:
 ;;; Priority levels
 ;;;
 ;;;============================================================
+
+(eval-when (:compile-toplevel :load-toplevel :execute)
+  (proclaim '(special inter::priority-level)))
+
+(def-kr-type PRIORITY-LEVEL ()
+  '(is-a-p inter::priority-level)
+  "[an instance of inter:PRIORITY-LEVEL]")
 
 (create-schema 'priority-level
 	       ;; bam: the interactors list is now stored with the
@@ -1989,6 +2000,36 @@ removing or changing order of priorities.
 	NIL
 	T)))
 
+
+;;;;;;;;;;;;;;;;;; Types specifically for inter::interactor ;;;;;;;;;;;;;;;;
+
+;; @@@ moved from ../opal/type.lisp
+
+(eval-when (:compile-toplevel :load-toplevel :execute)
+  (proclaim '(special inter::interactor-window)))
+
+(def-kr-type WINDOW ()
+  '(is-a-p inter::interactor-window)
+  "[an instance of inter::INTERACTOR-WINDOW]")
+
+(def-kr-type WINDOW-OR-NIL ()
+  '(or (is-a-p inter::interactor-window) null)
+  "[either an instance of inter:INTERACTOR-WINDOW or NIL]")
+
+(def-kr-type '(OR LIST (IS-A-P inter::INTERACTOR-WINDOW)))
+
+(defun list-of-wins-p (l)
+  (let ((succeeded? T))
+    (when (listp l)
+      (dolist (w l)
+	(if (not (is-a-p w inter::interactor-window))
+	    (setf succeeded? NIL)))
+      succeeded?)))
+
+(def-kr-type inter-window-type ()
+  '(or null (is-a-p inter::interactor-window)
+    (member T)
+    (satisfies list-of-wins-p)))
 
 ;;;============================================================
 ;;; Exported procedures

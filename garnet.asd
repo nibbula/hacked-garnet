@@ -28,7 +28,8 @@ for creating interfaces to Common Lisp software."
       :components ((:file "package")
 		   (:file "kr-macros")
 		   (:file "kr")
-		   (:file "constraints")))
+		   (:file "constraints")
+		   (:file "kr-doc")))
      (:module "gem"
       :serial t
       :components ((:file "gem")
@@ -145,7 +146,8 @@ for creating interfaces to Common Lisp software."
 		   (:file "scalable-aggregraph-image")))
      (:module "gadgets"
       :serial t
-      :components ((:file "GAD-scroll-parts")
+      :components ((:file "package")
+		   (:file "GAD-scroll-parts")
                    (:file "GAD-slider-parts")
                    (:file "GAD-v-arrows")
                    (:file "GAD-v-boxes")
@@ -207,8 +209,8 @@ for creating interfaces to Common Lisp software."
                    (:file "motif-save-gadget")
                    (:file "motif-load-gadget")
                    (:file "motif-menubar")
-                   (:file "multifont-gadget")))
-     #|
+                   ;; (:file "multifont-gadget")
+		   ))
      (:module "protected-eval"
       :serial t
       :components ((:file "scrolling-unlabeled-box")
@@ -217,10 +219,10 @@ for creating interfaces to Common Lisp software."
 		   (:file "protected-process")))
      (:module "debug"
       :serial t
-      :components ((:file "debug-fns")
+      :components ((:file "package")
+		   (:file "debug-fns")
                    (:file "objsize")
                    (:file "inspector")
                    (:file "suggest-constants")))
-     |#
-     ;; (:file "standard-names")
+     (:file "standard-names")
      ))

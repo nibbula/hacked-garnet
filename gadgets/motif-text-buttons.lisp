@@ -102,12 +102,12 @@
 
 (in-package "GARNET-GADGETS")
 
-(eval-when (eval load compile)
-  (export '(Motif-Text-Button Motif-Text-Button-Panel))
-  #+garnet-debug
-  (export '(Motif-Text-Buttons-Go Motif-Text-Buttons-Stop
-	    Demo-Motif-Text-Button Demo-Motif-Text-Button-Panel
-	    Motif-Text-Buttons-Top-Agg Motif-Text-Buttons-Win)))
+;; (eval-when (eval load compile)
+;;   (export '(Motif-Text-Button Motif-Text-Button-Panel))
+;;   #+garnet-debug
+;;   (export '(Motif-Text-Buttons-Go Motif-Text-Buttons-Stop
+;; 	    Demo-Motif-Text-Button Demo-Motif-Text-Button-Panel
+;; 	    Motif-Text-Buttons-Top-Agg Motif-Text-Buttons-Win)))
 
 (create-instance 'MOTIF-TEXT-BUTTON-TEXT-LABEL-PROTOTYPE opal:text
   (:constant '(:actual-heightp))

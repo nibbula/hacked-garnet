@@ -1816,11 +1816,13 @@ pixmap format in the list of valid formats."
 	(if raise-p :above :below)))
 
 
+;; @@@ workaround 
+;; (defun x-read-an-image (root-window pathname)
+;;   (declare (ignore root-window))
+;;   (xlib:read-bitmap-file pathname))
 
-(defun x-read-an-image (root-window pathname)
-  (declare (ignore root-window))
+(defun x-read-an-image (pathname)
   (xlib:read-bitmap-file pathname))
-
 
 
 ;;; Reparent a window.

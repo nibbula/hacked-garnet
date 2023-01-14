@@ -120,65 +120,65 @@
 
 (in-package "OPAL")
 
-(eval-when (eval load compile)
-  (export '(MULTIFONT-TEXT
-	    
-	    SET-CURSOR-VISIBLE
-	    SET-CURSOR-TO-X-Y-POSITION
-	    SET-CURSOR-TO-LINE-CHAR-POSITION
-	    GET-CURSOR-LINE-CHAR-POSITION
-	    GO-TO-NEXT-CHAR
-	    GO-TO-PREV-CHAR
-	    GO-TO-NEXT-WORD
-	    GO-TO-PREV-WORD
-	    GO-TO-NEXT-LINE
-	    GO-TO-PREV-LINE
-	    GO-TO-BEGINNING-OF-TEXT
-	    GO-TO-END-OF-TEXT
-	    GO-TO-BEGINNING-OF-LINE
-	    GO-TO-END-OF-LINE
-	    
-	    FETCH-NEXT-CHAR
-	    FETCH-PREV-CHAR
-	    
-	    TOGGLE-SELECTION
-	    SET-SELECTION-TO-X-Y-POSITION
-	    SET-SELECTION-TO-LINE-CHAR-POSITION
-	    GET-SELECTION-LINE-CHAR-POSITION
-	    CHANGE-FONT-OF-SELECTION
-	    CHANGE-COLOR-OF-SELECTION
-	    
-	    ADD-CHAR
-	    DELETE-CHAR
-	    DELETE-PREV-CHAR
-	    INSERT-STRING
-	    ADD-OBJECT
-	    SEARCH-FOR-MARK
-	    SEARCH-BACKWARDS-FOR-MARK
-	    BETWEEN-MARKS-P
-	    MARK
-	    INSERT-MARK
-	    INSERT-TEXT
-	    DELETE-SUBSTRING
-	    DELETE-WORD
-	    DELETE-PREV-WORD
-	    KILL-REST-OF-LINE
-	    
-	    COPY-SELECTED-TEXT
-	    DELETE-SELECTION
-	    
-	    SET-TEXT
-	    GET-STRING
-	    GET-TEXT
-	    GET-OBJECTS
-	    
-	    NOTICE-RESIZE-OBJECT
-	    
-	    TEXT-TO-PURE-LIST
-	    PURE-LIST-TO-TEXT
-	    TEXT-TO-STRING
-	    CONCATENATE-TEXT
-	    EMPTY-TEXT-P)))
+;; (eval-when (eval load compile)
+;;   (export '(MULTIFONT-TEXT
+;;	    
+;; 	    SET-CURSOR-VISIBLE
+;; 	    SET-CURSOR-TO-X-Y-POSITION
+;; 	    SET-CURSOR-TO-LINE-CHAR-POSITION
+;; 	    GET-CURSOR-LINE-CHAR-POSITION
+;; 	    GO-TO-NEXT-CHAR
+;; 	    GO-TO-PREV-CHAR
+;; 	    GO-TO-NEXT-WORD
+;; 	    GO-TO-PREV-WORD
+;; 	    GO-TO-NEXT-LINE
+;; 	    GO-TO-PREV-LINE
+;; 	    GO-TO-BEGINNING-OF-TEXT
+;; 	    GO-TO-END-OF-TEXT
+;; 	    GO-TO-BEGINNING-OF-LINE
+;; 	    GO-TO-END-OF-LINE
+;;	    
+;; 	    FETCH-NEXT-CHAR
+;; 	    FETCH-PREV-CHAR
+;;	    
+;; 	    TOGGLE-SELECTION
+;; 	    SET-SELECTION-TO-X-Y-POSITION
+;; 	    SET-SELECTION-TO-LINE-CHAR-POSITION
+;; 	    GET-SELECTION-LINE-CHAR-POSITION
+;; 	    CHANGE-FONT-OF-SELECTION
+;; 	    CHANGE-COLOR-OF-SELECTION
+;;	    
+;; 	    ADD-CHAR
+;; 	    DELETE-CHAR
+;; 	    DELETE-PREV-CHAR
+;; 	    INSERT-STRING
+;; 	    ADD-OBJECT
+;; 	    SEARCH-FOR-MARK
+;; 	    SEARCH-BACKWARDS-FOR-MARK
+;; 	    BETWEEN-MARKS-P
+;; 	    MARK
+;; 	    INSERT-MARK
+;; 	    INSERT-TEXT
+;; 	    DELETE-SUBSTRING
+;; 	    DELETE-WORD
+;; 	    DELETE-PREV-WORD
+;; 	    KILL-REST-OF-LINE
+;;	    
+;; 	    COPY-SELECTED-TEXT
+;; 	    DELETE-SELECTION
+;;	    
+;; 	    SET-TEXT
+;; 	    GET-STRING
+;; 	    GET-TEXT
+;; 	    GET-OBJECTS
+;;	    
+;; 	    NOTICE-RESIZE-OBJECT
+;;	    
+;; 	    TEXT-TO-PURE-LIST
+;; 	    PURE-LIST-TO-TEXT
+;; 	    TEXT-TO-STRING
+;; 	    CONCATENATE-TEXT
+;; 	    EMPTY-TEXT-P)))
 
 ;;; Global Variables
 
@@ -413,14 +413,14 @@
 (define-method :set-styles MULTIFONT-LINE (obj line-style filling-style)
   (let ((update-vals (g-local-value obj :update-slots-values)))
     (vector update-vals)
-    (setf (aref update-vals *multifont-lstyle*) line-style)))
+    (setf (aref update-vals +multifont-lstyle+) line-style)))
 
 (define-method :set-frr-bbox MULTIFONT-LINE (obj)
   (let ((update-vals (g-local-value obj :update-slots-values)))
-    (set-frr-bbox-fn (aref update-vals *multifont-left*)
-		     (aref update-vals *multifont-top*)
-		     (aref update-vals *multifont-width*)
-		     (aref update-vals *multifont-height*))))
+    (set-frr-bbox-fn (aref update-vals +multifont-left+)
+		     (aref update-vals +multifont-top+)
+		     (aref update-vals +multifont-width+)
+		     (aref update-vals +multifont-height+))))
 
 
 (s-value MULTIFONT-TEXT :do-not-dump-slots
@@ -1297,12 +1297,12 @@
 (define-method :draw opal::MULTIFONT-LINE (gob a-window)
   (let* ((update-vals (g-local-value gob :update-slots-values))
 	 (show-marks (g-value gob :show-marks))
-	 (left (aref update-vals *text-left*))
-	 (top (+ (aref update-vals *text-top*) (g-value gob :ascent)))
-	 (line-style (aref update-vals *mf-text-lstyle*))
-	 (function (aref update-vals *mf-text-draw-function*))
-	 (fill-p (aref update-vals *mf-text-fill-background-p*)))
-    (setf (aref update-vals *multifont-force-update*) NIL)
+	 (left (aref update-vals +text-left+))
+	 (top (+ (aref update-vals +text-top+) (g-value gob :ascent)))
+	 (line-style (aref update-vals +mf-text-lstyle+))
+	 (function (aref update-vals +mf-text-draw-function+))
+	 (fill-p (aref update-vals +mf-text-fill-background-p+)))
+    (setf (aref update-vals +multifont-force-update+) NIL)
     (with-demons-disabled
 	(s-value gob :force-update NIL))
     (when line-style

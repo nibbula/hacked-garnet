@@ -40,10 +40,11 @@ Change log:
 |#
 
 (in-package "GARNET-DEBUG")
+#|
 (eval-when (eval load compile)
   (export '(inspector inspect-next-inter Find-Slot-Starting-With
 	    *INSPECTOR-KEY* *SHOW-OBJECT-KEY* *INSPECTOR-NEXT-INTER-KEY*)))
-
+|#
 
 (defparameter big-font (opal:get-standard-font NIL :bold :large))
 (defparameter regular-font (opal:get-standard-font NIL NIL NIL))

@@ -251,8 +251,9 @@
 ;;;
 ;;;===========================================================================
 
+;; @@@ where is window being a special comming from??
 (defun update-start-fn (window)
-  (declare (ignore window))
+  ;; (declare (ignore window))
   #+ALLEGRO
   (if user::update-locking-p
       (unless (eq (mp:process-lock-locker *update-lock*) mp:*current-process*)
@@ -271,7 +272,7 @@
 
 
 (defun update-stop-fn (window)
-  (declare (ignore window))
+  ;; (declare (ignore window))
   #+ALLEGRO
   (if (and user::update-locking-p
 	   (eq (mp:process-lock-locker *update-lock*) mp:*current-process*))

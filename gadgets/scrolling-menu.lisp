@@ -142,11 +142,11 @@
 
 (in-package "GARNET-GADGETS")
 
-(eval-when (eval load compile)
-  (export '(Scrolling-Menu))
-  #+garnet-debug
-  (export '(Scrolling-Menu-Go Scrolling-Menu-Stop
-	    Scrolling-Menu-Obj Scrolling-Menu-Win Scrolling-Menu-Top-Agg)))
+;; (eval-when (eval load compile)
+;;   (export '(Scrolling-Menu))
+;;   #+garnet-debug
+;;   (export '(Scrolling-Menu-Go Scrolling-Menu-Stop
+;; 	    Scrolling-Menu-Obj Scrolling-Menu-Win Scrolling-Menu-Top-Agg)))
 
 (create-instance 'SCROLLING-MENU-FRAME opal:rectangle
    (:filling-style opal:white-fill)
@@ -378,7 +378,7 @@
    (:scr-incr 1)
    (:page-incr 5)
    (:int-scroll-feedback-p NIL)
-   (:indicator-font (opal:get-standard-font NIL NIL :small))
+   (:indicator-font (formula (opal:get-standard-font NIL NIL :small)))
    (:scroll-selection-function NIL)
 
    ;; Menu slots
@@ -403,7 +403,7 @@
    (:final-feedback-p T)
    (:text-offset 4)
    (:title NIL)
-   (:title-font (opal:get-standard-font :serif :roman :large))
+   (:title-font (formula (opal:get-standard-font :serif :roman :large)))
    (:menu-selection-function NIL)
    (:selected-ranks NIL)
 
@@ -494,13 +494,14 @@
   (opal::Gadget-Add-Local-Item gadget item :menu-item-list args))
 (define-method :add-item SCROLLING-MENU (gadget item &rest args)
   (opal::Gadget-Add-Item gadget item :menu-item-list args))
-   
-(define-method :remove-local-item SCROLLING-MENU
-               (gadget &optional item &key (key #'opal:no-func))
-  (opal::Gadget-Remove-Local-Item gadget item :menu-item-list key))
-(define-method :remove-item SCROLLING-MENU
-               (gadget &optional item &key (key #'opal:no-func))
-  (opal::Gadget-Remove-Item gadget item :menu-item-list key))
+
+(gu:with-muffled-style-warnings   
+  (define-method :remove-local-item SCROLLING-MENU
+                 (gadget &optional item &key (key #'opal:no-func))
+    (opal::Gadget-Remove-Local-Item gadget item :menu-item-list key))
+  (define-method :remove-item SCROLLING-MENU
+                 (gadget &optional item &key (key #'opal:no-func))
+    (opal::Gadget-Remove-Item gadget item :menu-item-list key)))
 
 (s-value SCROLLING-MENU :change-item (g-value opal:aggrelist :change-item))
 (s-value SCROLLING-MENU :remove-nth-item

@@ -45,9 +45,11 @@ Change log:
 ========================================================================
 |#
 
-(in-package "INTERACTORS")
+;; (in-package "INTERACTORS")
+(in-package :gesture)
 
-(eval-when (eval load compile)
+#|
+(eval-when (:compile-toplevel :load-toplevel :execute)
   (export '(gesture-interactor
 
 	    gest-classify                 ;; functions in classify.lisp
@@ -77,6 +79,7 @@ Change log:
 	    gest-classifier-read          ;; functions in fileio.lisp
 	    gest-classifier-write
 	    gest-classifier-convert)))
+|#
 
 ;;;============================================================
 ;;;============================================================
@@ -189,7 +192,8 @@ Change log:
     (if-debug new-Gesture-schema 
               (format T "Gesture initialize ~s~%" new-Gesture-schema))
 
-    (Check-Interactor-Type new-Gesture-schema inter:gesture-interactor)
+    ;; (Check-Interactor-Type new-Gesture-schema inter:gesture-interactor)
+    (Check-Interactor-Type new-Gesture-schema gesture-interactor)
     (Check-Required-Slots new-Gesture-schema)
     (Set-Up-Defaults new-Gesture-schema)
 ) ;end initialize procedure
@@ -434,7 +438,7 @@ Change log:
 ;;; Gesture schema
 ;;;============================================================
 
-(Create-Schema 'inter:gesture-interactor
+(Create-Schema 'gesture-interactor
         (:is-a inter:interactor)
         (:name :First-Gesture-interactor)
         (:start-action 'Gesture-Int-Start-Action)

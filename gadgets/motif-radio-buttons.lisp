@@ -106,13 +106,13 @@
 
 (in-package "GARNET-GADGETS")
 
-(eval-when (eval load compile)
-  (export '(Motif-Radio-Button Motif-Radio-Button-Panel))
-  #+garnet-debug	
-  (export '(Motif-Radio-Buttons-Go Motif-Radio-Buttons-Stop
-	    Demo-Motif-Radio-Button Demo-Motif-Radio-Button-Panel
-	    Demo-Motif-Radio-Button2 Motif-Radio-Buttons-Top-Agg
-	    Motif-Radio-Buttons-Win)))
+;; (eval-when (eval load compile)
+;;   (export '(Motif-Radio-Button Motif-Radio-Button-Panel))
+;;   #+garnet-debug	
+;;   (export '(Motif-Radio-Buttons-Go Motif-Radio-Buttons-Stop
+;; 	    Demo-Motif-Radio-Button Demo-Motif-Radio-Button-Panel
+;; 	    Demo-Motif-Radio-Button2 Motif-Radio-Buttons-Top-Agg
+;; 	    Motif-Radio-Buttons-Win)))
 
 (create-instance 'MOTIF-RADIO-BUTTON-TEXT-LABEL-PROTOTYPE opal:text
   (:constant '(:actual-heightp))

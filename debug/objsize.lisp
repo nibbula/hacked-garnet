@@ -63,10 +63,12 @@ ChangeLog:
 
 (in-package "GARNET-DEBUG")
 
+#|
 (eval-when (eval load compile)
   (export '(OBJBYTES AGGBYTES INTERBYTES
 	    *avoid-shared-values* *avoid-equal-values* *count-symbols*
 	    COUNT-FORMULAS WHY-NOT-CONSTANT)))
+|#
 
 ;; The schema structure size is 2 fields * 4 bytes + 4 bytes type info.
 ;; Formulas have 12 fields * 4 bytes + 4 bytes.

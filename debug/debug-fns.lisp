@@ -80,12 +80,14 @@ ChangeLog:
 
 (in-package "GARNET-DEBUG")
 
+#|
 (eval-when (eval load compile)
   (export '(explain-short explain-slot explain-nil
 	    fix-up-window flash ident invert 
 	    is-a-tree kids look look-inter 
 	    uninvert what where #-apple windows break-on-slot-set
 	    notify-on-slot-set clear-slot-set call-func-on-slot-set)))
+|#
 
 
 (defvar flash-object)
@@ -588,8 +590,10 @@ ChangeLog:
              (setf garnet-code
                    (case what
                      (1 (gem:translate-mouse-character
+			 gem:*event-receiver*
                          gem::*root-window* code state :BUTTON-PRESS))
-                     (3 (gem:translate-character gem::*root-window*
+                     (3 (gem:translate-character gem:*event-receiver*
+						 gem::*root-window*
                                                  x y state code time))))
              (setf loc-x x) (setf loc-y y)
              (setf obj (identify window x y garnet-code verbose)))
@@ -609,6 +613,7 @@ ChangeLog:
 	     (setf loc-x x)
 	     (setf loc-y y)
 	     (setf garnet-code (gem:translate-mouse-character
+				gem:*event-receiver*
 				gem::*root-window* code state event-key))
 	     (setf obj (identify window x y garnet-code verbose))
 	     t)
@@ -618,6 +623,7 @@ ChangeLog:
 	     (setf loc-x x)
 	     (setf loc-y y)
 	     (setf garnet-code (interactors::translate-character
+				gem:*event-receiver*
 				(opal::display-info-display
 				 (the opal::DISPLAY-INFO
 				      (g-value window :display-info)))

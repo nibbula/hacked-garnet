@@ -335,6 +335,7 @@ avoiding wasted objects.
 
 (setf (aref *Font-Table* 0 0 1) opal:default-font)
 
+(defvar *first-allocatable-colormap-index*)
 
 (let ((first-time T)
       (*first-allocatable-colormap-index* 1))
@@ -412,7 +413,7 @@ avoiding wasted objects.
           (let ((root-window (g-value device :root-window)))
 	    (if (and index
 		     ;;replaced the old array with a hash-table
-		     (zerop (decf (gethash old-index *colormap-index-table*)))
+		     (zerop (decf (gethash index *colormap-index-table*)))
 ;		     (zerop (decf (aref *colormap-index-table* index)))
 		     (>= index (first-allocatable-colormap-index root-window)))
                 (gem:colormap-property root-window
@@ -470,7 +471,8 @@ avoiding wasted objects.
 
 (create-instance 'opal::LINE-0 opal:line-style
   (:constant T))
-(defvar opal::THIN-LINE opal::LINE-0)
+;; (defvar opal::THIN-LINE opal::LINE-0)
+(defparameter opal::THIN-LINE opal::LINE-0)
 (create-instance 'opal::LINE-1 opal:line-style
   (:constant T)
   (:line-thickness 1))

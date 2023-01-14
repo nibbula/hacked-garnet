@@ -115,7 +115,7 @@ Change Log for Error-Gadget.lisp:
 
 (in-package "GARNET-GADGETS")
 
-(export '(PROMPTER-GADGET DISPLAY-PROMPT DISPLAY-PROMPT-AND-WAIT))
+;; (export '(PROMPTER-GADGET DISPLAY-PROMPT DISPLAY-PROMPT-AND-WAIT))
 
 ;(proclaim '(special ERROR-INPUT-PRIORITY-LEVEL))
 
@@ -176,13 +176,16 @@ Change Log for Error-Gadget.lisp:
     (if waiting (inter:interaction-complete (list value but-value)))))	 
 
 
-(kr:def-kr-type Package () 'Package)
+;; (kr:def-kr-type Package () 'Package)
+;; (prog () (def-kr-type Package () 'Package))
+;; @@@ Why is this different from all the others?
+(kr::add-new-type "PACKAGE" 'package #'packagep nil)
 
 
 ;; NOTE:  If :parent-window is specified, then the parent window must already
 ;; have been opal:update'd when the instance of ERROR-GADGET is created.
 ;;
-(kr:create-instance 'PROMPTER-GADGET GG:Motif-Query-Gadget
+(create-instance 'PROMPTER-GADGET GG:Motif-Query-Gadget
    :declare ((:parameters :string :field-width :input-font :value
 			  :default-value :eval? :read-bindings
 			  :read-package)
@@ -255,7 +258,7 @@ Change Log for Error-Gadget.lisp:
 			       '(:OK :APPLY :CANCEL))))
    (:eval? t) ; if T, then "EVAL" button is included.
    (:read-bindings nil)			; List of variables with
-   (:read-package (find-package :user))	; bindings (like a let
+   (:read-package (find-package :garnet-user))	; bindings (like a let
 					; statement).  These bindings
 					; are put in force when the
 					; input string is read. 
@@ -289,9 +292,13 @@ Change Log for Error-Gadget.lisp:
 		     (declare (ignore value))
 		     (Prompter-Gadget-Eval-Func button T))) ; always use the
 					; value T
-	       (:parts
-		(:shadow :gray-outline :white-field :text
-		 (:feedback-obj :omit)))
+
+	       ;; @@@ text-button has these, but I don't think motif-text-button
+	       ;; has them
+	       ;; (:parts
+	       ;; 	(:shadow :gray-outline :white-field :text
+	       ;; 	 (:feedback-obj :omit)))
+		 
        #|
 	       (:interactors
 		((:TEXT-BUTTON-PRESS :modify
@@ -346,7 +353,7 @@ Change Log for Error-Gadget.lisp:
 		      &key (label-list '(:ok :cancel))
 			   (eval? t)
 			   (default-value nil)
-			   (read-package (find-package :user))
+			   (read-package (find-package :garnet-user))
 			   (read-bindings nil))
   "Displays a prompter gadget in the modless form.  Assumes that
 there is a selection-function which takes three values:
@@ -398,7 +405,7 @@ latest value read from input.
 
 
 (defun prompter-gadget-go ()
-  (let (agg egadget qgadget feed)
+  (let (agg #|egadget qgadget|# feed)
     (create-instance 'prompter-gadget-test-win inter:interactor-window
 		     (:title "test prompter gadget"))
     (s-value prompter-gadget-test-win :aggregate
@@ -438,7 +445,4 @@ latest value read from input.
 (defun prompter-gadget-stop ()
   (opal:destroy prompter-gadget-test-win))
 
-(export '(prompter-gadget-go prompter-gadget-stop))
-
-
-
+;; (export '(prompter-gadget-go prompter-gadget-stop))

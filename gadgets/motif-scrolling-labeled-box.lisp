@@ -79,12 +79,12 @@
 
 (in-package :GARNET-GADGETS)
 
-(eval-when (eval load compile)
-  (export '(Insert-Text-Into-Box Motif-Scrolling-Labeled-Box))
-  #+garnet-debug
-  (export '(Motif-Scrolling-Labeled-Box-Go Motif-Scrolling-Labeled-Box-Stop
-	    Motif-Scrolling-Labeled-Box-Win Motif-Scrolling-Labeled-Box-Top-Agg
-	    Demo-Motif-Scrolling-Labeled-Box)))
+;; (eval-when (eval load compile)
+;;   (export '(Insert-Text-Into-Box Motif-Scrolling-Labeled-Box))
+;;   #+garnet-debug
+;;   (export '(Motif-Scrolling-Labeled-Box-Go Motif-Scrolling-Labeled-Box-Stop
+;; 	    Motif-Scrolling-Labeled-Box-Win Motif-Scrolling-Labeled-Box-Top-Agg
+;; 	    Demo-Motif-Scrolling-Labeled-Box)))
 
 (create-instance 'MOTIF-SCROLLING-LABELED-BOX MOTIF-GADGET-PROTOTYPE
   :declare ((:parameters :left :top :width :field-offset :label-offset

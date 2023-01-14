@@ -10,7 +10,6 @@
 
 (in-package "INTERACTORS")
 
-
 ;;;;    definitions of garnet mouse keywords for the left button release
 (define-mouse-up *left-button* nil :leftup)
 

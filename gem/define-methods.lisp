@@ -146,7 +146,8 @@
 
 (gem-method :RAISE-OR-LOWER (window raise-p))
 
-(gem-method :READ-AN-IMAGE (root-window pathname))
+;; @@@ workaround until gem improvement
+;; (gem-method :READ-AN-IMAGE (root-window pathname))
 
 (gem-method :REPARENT (window new-parent drawable left top))
 
@@ -168,15 +169,15 @@
 
 (gem-method :TEXT-WIDTH (root-window opal-font string))
 
-(gem-method :TRANSLATE-CHARACTER (window x y state code time))
+;; (gem-method :TRANSLATE-CHARACTER (window x y state code time))
 
 (gem-method :TRANSLATE-CODE (window scan-code shiftp))
 
 (gem-method :TRANSLATE-COORDINATES (root-window window x y &optional
                                                 other-window))
 
-(gem-method :TRANSLATE-MOUSE-CHARACTER (root-window button-code modifier-bits
-                                        event-key))
+;; (gem-method :TRANSLATE-MOUSE-CHARACTER (root-window button-code modifier-bits
+;;                                         event-key))
 
 (gem-method :WINDOW-DEBUG-ID (window))
 

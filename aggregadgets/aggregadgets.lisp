@@ -84,8 +84,8 @@ Change log:
 |#
 
 (in-package "OPAL")
-(eval-when (eval load compile)
-  (export '(GVL-SIBLING AGGREGADGET)))
+;; (eval-when (eval load compile)
+;;   (export '(GVL-SIBLING AGGREGADGET)))
 
 ;;;---------------------------------------------------------
 ;;; Macros to make the pathes to other objects more readable
@@ -339,7 +339,7 @@ Could not find component of rank ~S in prototype.~%" agget rank)))))
 	 ;; Slots can either be a list of slot/value pairs or a function to
 	 ;; generate a single part.
 	 (setf slots (get-body part)))
-	(t (error "bad part specification" part)))
+	(t (error "bad part specification ~s" part)))
       ;; now make an instance
       (cond ((eq protopart :omit))  ;; do nothing
 	    ((eq protopart :modify)
@@ -425,7 +425,7 @@ Could not find component of rank ~S in prototype.~%" agget rank)))))
 	    ((keywordp inter)
 	     (setf name inter)
 	     (setf protointer :modify))
-	    (t (error "bad interactor specification" inter)))
+	    (t (error "bad interactor specification ~a" inter)))
       (cond ((eq protointer :omit))
 	    ((eq protointer :modify)
 	     (setf protointer (g-value prototype name))

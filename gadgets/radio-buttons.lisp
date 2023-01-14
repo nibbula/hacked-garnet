@@ -103,12 +103,12 @@
 
 (in-package "GARNET-GADGETS")
 
-(eval-when (eval load compile)
-  (export '(Radio-Button Radio-Button-Panel))
-  #+garnet-debug
-  (export '(Radio-Buttons-Go Radio-Buttons-Stop Radio-Button-Obj
-	    Radio-Buttons-Obj Radio-Buttons-Top-Agg Radio-Buttons-Win
-	    Radio-Button-Obj2)))
+;; (eval-when (eval load compile)
+;;   (export '(Radio-Button Radio-Button-Panel))
+;;   #+garnet-debug
+;;   (export '(Radio-Buttons-Go Radio-Buttons-Stop Radio-Button-Obj
+;; 	    Radio-Buttons-Obj Radio-Buttons-Top-Agg Radio-Buttons-Win
+;; 	    Radio-Button-Obj2)))
 
 (create-instance 'RADIO-BUTTON opal:aggregadget
   :declare ((:parameters :left :top :button-diameter :shadow-offset
@@ -405,13 +405,14 @@
   (opal::Gadget-Add-Local-Item gadget item :radio-button-list args))
 (define-method :add-item RADIO-BUTTON-PANEL (gadget item &rest args)
   (opal::Gadget-Add-Item gadget item :radio-button-list args))
-   
-(define-method :remove-local-item RADIO-BUTTON-PANEL
-               (gadget &optional item &key (key #'opal:no-func))
-  (opal::Gadget-Remove-Local-Item gadget item :radio-button-list key))
-(define-method :remove-item RADIO-BUTTON-PANEL
-               (gadget &optional item &key (key #'opal:no-func))
-  (opal::Gadget-Remove-Item gadget item :radio-button-list key))
+
+(gu:with-muffled-style-warnings
+  (define-method :remove-local-item RADIO-BUTTON-PANEL
+                 (gadget &optional item &key (key #'opal:no-func))
+    (opal::Gadget-Remove-Local-Item gadget item :radio-button-list key))
+  (define-method :remove-item RADIO-BUTTON-PANEL
+                 (gadget &optional item &key (key #'opal:no-func))
+    (opal::Gadget-Remove-Item gadget item :radio-button-list key)))
 
 (s-value RADIO-BUTTON-PANEL
 	 :change-item

@@ -76,10 +76,10 @@
 
 (in-package "GARNET-GADGETS")
 
-(eval-when (eval load compile)
-  (export '(Gauge))
-  #+garnet-debug
-  (export '(Gauge-Go Gauge-Stop Gauge-Obj Gauge-Top-Agg Gauge-Win)))
+;; (eval-when (eval load compile)
+;;   (export '(Gauge))
+;;   #+garnet-debug
+;;   (export '(Gauge-Go Gauge-Stop Gauge-Obj Gauge-Top-Agg Gauge-Win)))
 
 (defvar short-PI (coerce PI 'short-float))
 
@@ -323,7 +323,7 @@
    (:title "Gauge")
    (:title-font opal:default-font)
    (:value-font opal:default-font)
-   (:enum-font (opal:get-standard-font :fixed :roman :small))
+   (:enum-font (formula (opal:get-standard-font :fixed :roman :small)))
    (:num-marks 10)      ; Includes endpoints
    (:tic-marks-p T)
    (:enumerate-p T)

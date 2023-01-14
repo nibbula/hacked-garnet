@@ -26,8 +26,8 @@
 
 (in-package "GARNET-GADGETS")
 
-(eval-when (eval load compile)
-  (export '(SAVE-GADGET)))
+;; (eval-when (eval load compile)
+;;   (export '(SAVE-GADGET)))
 
 (create-instance 'SAVE-GADGET opal:aggregadget
   :declare ((:parameters :parent-window :window-title :window-left :window-top
@@ -73,21 +73,21 @@
 					 (gvl :window :height)) 2)
 			       0)))
   ;; Slots for dir-input customization
-  (:DIR-INPUT-FIELD-FONT (opal:get-standard-font NIL NIL :small))
-  (:DIR-INPUT-LABEL-FONT (opal:get-standard-font NIL :BOLD NIL))
+  (:DIR-INPUT-FIELD-FONT (formula (opal:get-standard-font NIL NIL :small)))
+  (:DIR-INPUT-LABEL-FONT (formula (opal:get-standard-font NIL :bold NIL)))
    
   ;; Slots for message customization
-  (:MESSAGE-FONT (OPAL:GET-STANDARD-FONT :FIXED :ITALIC :SMALL))
+  (:MESSAGE-FONT (formula (opal:get-standard-font :fixed :italic :small)))
   (:MESSAGE-STRING "Fetching directory...")
 
   ;; Slots for file-menu customization
   (:NUM-VISIBLE 6)
-  (:FILE-MENU-FONT (opal:get-standard-font NIL :BOLD NIL))
+  (:FILE-MENU-FONT (formula (opal:get-standard-font NIL :BOLD NIL)))
   (:INITIAL-DIRECTORY #-apple "./" #+apple ":")
    
   ;; Slots for file-input customization
-  (:FILE-INPUT-FIELD-FONT (opal:get-standard-font NIL NIL :small))
-  (:FILE-INPUT-LABEL-FONT (opal:get-standard-font NIL :BOLD NIL))
+  (:FILE-INPUT-FIELD-FONT (formula (opal:get-standard-font NIL NIL :small)))
+  (:FILE-INPUT-LABEL-FONT (formula (opal:get-standard-font NIL :BOLD NIL)))
    
   ;; Slots for button customization
   (:BUTTON-PANEL-ITEMS '("Save" "Cancel"))
@@ -114,9 +114,11 @@
       (:TOP ,(o-formula (gvl :parent :top) 24))
       (:WIDTH ,(o-formula (gvl :parent :min-gadget-width) 240))
       (:MIN-FRAME-WIDTH NIL)
+      ;; (:FIELD-FONT ,(o-formula (gvl :parent :dir-input-field-font)))
       (:FIELD-FONT ,(o-formula (gvl :parent :dir-input-field-font)))
       (:FIELD-OFFSET 0)
       (:LABEL-OFFSET 5)
+      ;; (:LABEL-FONT ,(o-formula (gvl :parent :dir-input-label-font)))
       (:LABEL-FONT ,(o-formula (gvl :parent :dir-input-label-font)))
       (:GROW-P T)
       (:LABEL-STRING "Directory:")
@@ -134,8 +136,8 @@
       (:TOP ,(o-formula (+ (gvl :parent :dir-input :top)
 			   (gvl :parent :dir-input :height)
 			   20)))
-      (:INDICATOR-FONT ,(create-instance nil OPAL:FONT
-            (:SIZE :SMALL)))
+      ;; (:INDICATOR-FONT ,(create-instance nil OPAL:FONT (:SIZE :SMALL)))
+      (:INDICATOR-FONT (formula (create-instance nil OPAL:FONT (:SIZE :SMALL))))
       (:MULTIPLE-P T)
       (:PAGE-INCR 5)
       (:SCR-INCR 1)
@@ -146,6 +148,7 @@
       (:MIN-FRAME-WIDTH ,(o-formula (- (gvl :parent :min-gadget-width) 60)))
       (:TEXT-OFFSET 4)
       (:INT-MENU-FEEDBACk-P T)
+      ;; (:ITEM-FONT ,(o-formula (gvl :parent :file-menu-font)))
       (:ITEM-FONT ,(o-formula (gvl :parent :file-menu-font)))
       (:V-SPACING 3)
       (:MIN-SCROLL-BAR-WIDTH 20)
@@ -167,10 +170,12 @@
       (:WIDTH ,(o-formula (gvl :parent :min-gadget-width) 240))
       (:CONSTANT (:KNOWN-AS :COMPONENTS :FIELD-TEXT :FRAME :LABEL-TEXT))
       (:MIN-FRAME-WIDTH NIL)
-      (:FIELD-FONT ,(o-formula (gvl :parent :file-input-field-font)))
+      ;; (:FIELD-FONT ,(o-formula (gvl :parent :file-input-field-font)))
+      (:FIELD-FONT (formula (gvl :parent :file-input-field-font)))
       (:FIELD-OFFSET 0)
       (:LABEL-OFFSET 5)
-      (:LABEL-FONT ,(o-formula (gvl :parent :file-input-label-font)))
+      ;; (:LABEL-FONT ,(o-formula (gvl :parent :file-input-label-font)))
+      (:LABEL-FONT (o (gvl :parent :file-input-label-font)))
       (:GROW-P T)
       (:SELECTION-FUNCTION Check-Filename)
       (:LABEL-STRING "Filename:")
@@ -182,7 +187,9 @@
     (:MESSAGE ,OPAL:TEXT
       (:LEFT ,(o-formula (+ (gvl :parent :left) 20) 30))
       (:TOP ,(o-formula (+ (gvl :parent :top) 20) 44))
-      (:FONT ,(o-formula (gvl :parent :message-font))))
+      ;; (:FONT ,(o-formula (gvl :parent :message-font)))
+      (:FONT (formula (gvl :parent :message-font)))
+      )
 
 ;;; These are the two buttons for save and cancel
 	    
@@ -202,7 +209,8 @@
 	       (+ maxbot 25))))
 	     
      (:SELECTION-FUNCTION DEFAULT-SAVE-FUNCTION)
-     (:FONT ,(o-formula (gvl :parent :button-panel-font)))
+     ;; (:FONT ,(o-formula (gvl :parent :button-panel-font)))
+     (:FONT (formula (gvl :parent :button-panel-font)))
      (:H-ALIGN :CENTER)
      (:PIXEL-MARGIN NIL)
      (:RANK-MARGIN NIL)
