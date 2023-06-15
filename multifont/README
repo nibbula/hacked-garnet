@@ -1,0 +1,10 @@
+A fake module directory for the multifont module whose files are linked in
+from other directories.
+
+@@@
+We should probably clean this up. One of:
+ - Multfont shouldn't even be an option and should just always be compiled,
+   and multifont sources should just be in with the rest.
+ - Multifont should be an option and the files should get compiled along with
+   their home modules.
+ - Move the files actually in here? [NOT SO GOOD]
